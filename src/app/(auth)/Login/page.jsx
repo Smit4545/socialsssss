@@ -24,6 +24,7 @@ const LogIn = () => {
 
       if (response.ok) {
         document.cookie = `token=${data.token}; path=/; max-age=3600`;
+        document.cookie = `userId=${data.id}; path=/; max-age=3600`;
         localStorage.setItem("userId", data.id);
         localStorage.setItem("username", data.name);
         router.push("/");
@@ -36,7 +37,7 @@ const LogIn = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-400 via-pink-400 to-red-400">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-700  to-gray-900">
       <div className="w-full max-w-md p-8 space-y-6 bg-white/70 backdrop-blur-lg shadow-2xl rounded-2xl">
         <h2 className="text-3xl font-extrabold text-center text-gray-900">Welcome Back</h2>
         <p className="text-center text-gray-600">Sign in to continue! </p>
@@ -51,7 +52,7 @@ const LogIn = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-4 bottom-0 text-gray-800 bg-transparent border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer"
+              className="w-full px-4 py-4 bottom-0 text-gray-800 bg-transparent border-2 border-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer"
               placeholder=" "
             />
             <label
@@ -71,7 +72,7 @@ const LogIn = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full bottom-0 px-4 py-4 text-gray-800 bg-transparent border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer"
+              className="w-full bottom-0 px-4 py-4 text-gray-800 bg-transparent border-2 border-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer"
               placeholder=" "
             />
             <label
@@ -88,7 +89,7 @@ const LogIn = () => {
           {/* Sign In Button */}
           <button
             type="submit"
-            className="w-full px-4 py-3 text-white font-bold bg-gradient-to-r from-indigo-500 to-blue-600 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+            className="w-full px-4 py-3 text-white font-bold bg-gradient-to-r rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-all"
           >
             Sign In
           </button>

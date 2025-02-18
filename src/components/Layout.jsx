@@ -5,6 +5,12 @@ import Link from "next/link";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
+import Badge from "@mui/material/Badge";
+import MailIcon from "@mui/icons-material/Mail";
+import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import CheckIcon from "@mui/icons-material/Check";
 
 export default function Layout({ children }) {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -17,12 +23,10 @@ export default function Layout({ children }) {
   const [currentChildren, setCurrentChildren] = useState(children);
   const router = useRouter();
 
-  const userId =
-    typeof window !== "undefined" ? localStorage.getItem("userId") : null;
+  const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
 
   useEffect(() => {
-    const userId =
-      typeof window !== "undefined" ? localStorage.getItem("userId") : null;
+    const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
     if (userId) {
       setHasToken(true);
     }
@@ -87,6 +91,7 @@ export default function Layout({ children }) {
 
   const handleLogout = () => {
     Cookies.remove("token");
+    Cookies.remove("userId");
     localStorage.removeItem("userId");
     setHasToken(false);
     router.push("/Login");
@@ -94,21 +99,17 @@ export default function Layout({ children }) {
 
   return (
     <div className="min-h-screen  flex flex-col">
-      <header className="bg-red-800  text-white px-4 py-3 flex items-center justify-between">
+      <header className="bg-red-900 text-white px-4 py-3 flex items-center justify-between">
         <Link href="/">
           <div className="text-2xl font-extrabold">Socialsssss</div>
         </Link>
         <div className="flex items-center space-x-4">
           <nav className="hidden lg:flex space-x-4">
             <Link href="/friends">
-              <p className="hover:bg-gray-700 px-3 py-2 rounded-lg cursor-pointer font-bold">
-                Friends
-              </p>
+              <PeopleAltIcon style={{ color: "white", height: "40px", width: "50px" }} />
             </Link>
             <Link href="/profile">
-              <p className="hover:bg-gray-700 px-3 py-2 rounded-lg cursor-pointer font-bold">
-                Profile
-              </p>
+              <AccountBoxOutlinedIcon style={{ color: "white", height: "40px", width: "50px" }} />
             </Link>
           </nav>
 
@@ -117,20 +118,20 @@ export default function Layout({ children }) {
               <div className="relative">
                 <button
                   onClick={toggleFriendRequests}
-                  className="bg-gray-700 px-3 py-2 rounded-lg font-bold hover:bg-gray-600"
+                  className="bg-black px-3 py-2 rounded-lg font-bold"
                 >
-                  Friend Requests
-                  {pendingRequests.length > 0 && (
+                  <Badge badgeContent={pendingRequests.length} color="success">
+                    <MailIcon color="action" style={{ color: "white" }} />
+                  </Badge>
+                  {/* {pendingRequests.length > 0 && (
                     <span className="ml-2 bg-blue-500 text-white text-sm px-2 py-1 rounded-full">
                       {pendingRequests.length}
                     </span>
-                  )}
+                  )} */}
                 </button>
                 {isFriendRequestsOpen && (
                   <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg text-black z-50">
-                    <div className="p-4 font-bold border-b">
-                      Friend Requests
-                    </div>
+                    <div className="p-4 font-bold border-b">Friend Requests</div>
                     <ul>
                       {pendingRequests.length > 0 ? (
                         pendingRequests.map((request) => (
@@ -141,12 +142,10 @@ export default function Layout({ children }) {
                             <span>{name[request.senderId]}</span>
                             <div className="space-x-2">
                               <button
-                                onClick={() =>
-                                  handleAcceptRequest(request.senderId)
-                                }
+                                onClick={() => handleAcceptRequest(request.senderId)}
                                 className="bg-green-500 text-white px-2 py-1 rounded-lg hover:bg-green-600"
                               >
-                                Accept
+                                <CheckIcon />
                               </button>
                             </div>
                           </li>
@@ -160,9 +159,9 @@ export default function Layout({ children }) {
               </div>
               <button
                 onClick={handleLogout}
-                className="bg-red-600 px-3 py-2 rounded-lg font-bold hover:bg-red-700"
+                className="bg-black px-3 py-2 rounded-lg font-bold hover:bg-red-700"
               >
-                Logout
+                <LogoutSharpIcon />
               </button>
             </>
           )}
@@ -181,9 +180,7 @@ export default function Layout({ children }) {
       {isMenuOpen && (
         <nav className="lg:hidden bg-red-800 text-white p-4 space-y-2">
           <Link href="/">
-            <p className="block p-3 hover:bg-gray-700 font-bold rounded-lg cursor-pointer">
-              Home
-            </p>
+            <p className="block p-3 hover:bg-gray-700 font-bold rounded-lg cursor-pointer">Home</p>
           </Link>
           <Link href="/friends">
             <p className="block p-3 hover:bg-gray-700 font-bold rounded-lg cursor-pointer">

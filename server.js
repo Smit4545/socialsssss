@@ -25,7 +25,7 @@
 //     },
 //   });
 
-//   const userLocations = {}; 
+//   const userLocations = {};
 
 //   io.on("connection", (socket) => {
 //     console.log("Socket connected:", socket.id);
@@ -119,7 +119,10 @@ app.prepare().then(() => {
   const io = new Server(httpServer, {
     path: "/api/socket.io",
     cors: {
-      origin: ["http://localhost:3000", "https://5b0b-2401-4900-1c80-a3e0-480f-d842-a400-853f.ngrok-free.app"],
+      origin: [
+        "http://localhost:3000",
+        "https://e6f3-2401-4900-1c80-a3e0-b034-f274-1ad2-732f.ngrok-free.app",
+      ],
       methods: ["GET", "POST"],
     },
   });
@@ -142,7 +145,8 @@ app.prepare().then(() => {
 
     // Join chat room
     socket.on("join-room", ({ userId, friendId }) => {
-      if (!userId || !friendId) return console.error("❌ Invalid join-room data:", { userId, friendId });
+      if (!userId || !friendId)
+        return console.error("❌ Invalid join-room data:", { userId, friendId });
 
       const room = [userId, friendId].sort().join("-");
       socket.join(room);
@@ -162,21 +166,21 @@ app.prepare().then(() => {
 
     // Location Tracking
     socket.on("update-location", (data) => {
-            if (!data.userId || !data.lat || !data.lng) {
-              console.error("Invalid location data:", data);
-              return;
-            }
-      
-            userLocations[data.userId] = {
-              userId: data.userId,
-              username: data.username,
-              lat: data.lat,
-              lng: data.lng,
-            };
-      
-            io.emit("location-updated", userLocations);
-            console.log(`Location updated: ${data.userId}`, data);
-          });
+      if (!data.userId || !data.lat || !data.lng) {
+        console.error("Invalid location data:", data);
+        return;
+      }
+
+      userLocations[data.userId] = {
+        userId: data.userId,
+        username: data.username,
+        lat: data.lat,
+        lng: data.lng,
+      };
+
+      io.emit("location-updated", userLocations);
+      console.log(`Location updated: ${data.userId}`, data);
+    });
 
     // Video Call: Initiate Call
     socket.on("call-user", ({ userToCall, signal, from }) => {
@@ -185,12 +189,11 @@ app.prepare().then(() => {
         io.to(users[from]).emit("call-error", { message: "User is offline or not registered" });
         return;
       }
-    
+
       activeCalls[from] = userToCall; // Store active call
       io.to(users[userToCall]).emit("incoming-call", { signal, from });
       console.log(`📞 Call request sent from ${from} to ${userToCall}`);
     });
-    
 
     // Video Call: Accept Call
     socket.on("accept-call", ({ signal, from }) => {

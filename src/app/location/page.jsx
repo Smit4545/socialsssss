@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { useSocket } from "../../lib/socket"; 
+import { useSocket } from "../../lib/socket";
 import L from "leaflet";
 
 export default function LiveLocation() {
@@ -10,10 +10,8 @@ export default function LiveLocation() {
   const [userLocation, setUserLocation] = useState(null);
   const [allUsers, setAllUsers] = useState({});
   const [error, setError] = useState("");
-  const userId =
-    typeof window !== "undefined" ? localStorage.getItem("userId") : null;
-  const username =
-    typeof window !== "undefined" ? localStorage.getItem("username") : "You";
+  const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
+  const username = typeof window !== "undefined" ? localStorage.getItem("username") : "You";
 
   const defaultIcon = new L.Icon({
     iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
@@ -75,7 +73,6 @@ export default function LiveLocation() {
         Live Location Tracker
       </h1>
 
-      
       {error && (
         <div className="bg-red-500 text-white text-center py-2">
           <p>{error}</p>
@@ -88,9 +85,7 @@ export default function LiveLocation() {
         className="h-full w-full"
         style={{ height: "calc(100vh - 64px)" }}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
         {userLocation && (
           <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
@@ -100,20 +95,17 @@ export default function LiveLocation() {
           </Marker>
         )}
 
-        {Object.values(allUsers).map((user) => (
-          user.userId !== userId && (
-            <Marker
-              key={user.userId}
-              position={[user.lat, user.lng]}
-              icon={defaultIcon}
-            >
-              <Popup>
-                {console.log(user.username)}
-                <strong>{user.username}</strong>
-              </Popup>
-            </Marker>
-          )
-        ))}
+        {Object.values(allUsers).map(
+          (user) =>
+            user.userId !== userId && (
+              <Marker key={user.userId} position={[user.lat, user.lng]} icon={defaultIcon}>
+                <Popup>
+                  {console.log(user.username)}
+                  <strong>{user.username}</strong>
+                </Popup>
+              </Marker>
+            )
+        )}
       </MapContainer>
     </div>
   );

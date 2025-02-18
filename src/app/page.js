@@ -15,8 +15,7 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef(null);
 
-  const userId =
-    typeof window !== "undefined" ? localStorage.getItem("userId") : null;
+  const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
   const router = useRouter();
   const [hasToken, setHasToken] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -55,9 +54,7 @@ export default function Home() {
       fetchPosts();
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
-          post._id === postId
-            ? { ...post, likes: [...post.likes, response.data.userId] }
-            : post
+          post._id === postId ? { ...post, likes: [...post.likes, response.data.userId] } : post
         )
       );
     } catch (error) {
@@ -99,25 +96,20 @@ export default function Home() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isModalOpen]);
 
-  
-
   return (
     <Layout>
-
-      {loading ?
-     
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-500"></div>
-      </div>
-      : null
-  }
+      {loading ? (
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-500"></div>
+        </div>
+      ) : null}
       <div className="bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 min-h-screen relative">
         {/* Floating Create Post Button */}
         <button
           onClick={() => setIsModalOpen(true)}
-          className="fixed top-16 right-6 bg-gray-900 text-white px-4 py-1 rounded-xl shadow-lg hover:bg-wheat transition z-50"
+          className="fixed top-16 right-6 bg-gray-900 text-white px-4 py-1 rounded-full shadow-lg hover:bg-wheat transition z-50"
         >
-          ➕ Create Post
+          ➕
         </button>
 
         {/* Modal (Ensuring it's in front) */}
@@ -168,9 +160,10 @@ export default function Home() {
               <div
                 key={post._id}
                 className={`bg-gray-100 shadow-xl rounded-lg p-6 transition-all transform hover:scale-105 hover:shadow-2xl ${
-                  post.likes.includes(userId)?"font-black border-8 border-white bg-slate-800 text-white"
-                //    ? "border-8 border-red-500 bg-red-300 font-black"
-                    : "font-black border-8 border-white bg-slate-800 text-white"
+                  post.likes.includes(userId)
+                    ? "font-black border-8 border-white bg-slate-800 text-white"
+                    : //    ? "border-8 border-red-500 bg-red-300 font-black"
+                      "font-black border-8 border-white bg-slate-800 text-white"
                 }`}
               >
                 <div className="flex items-center space-x-4">
@@ -182,9 +175,7 @@ export default function Home() {
                     {post.name[0].toUpperCase()}
                   </div>
                   <div>
-                    <h2 className="text-xl font-semibold uppercase">
-                      {post.name}
-                    </h2>
+                    <h2 className="text-xl font-semibold uppercase">{post.name}</h2>
                     <p className="text-sm">
                       {formatDistanceToNow(new Date(post.createdAt), {
                         addSuffix: true,
@@ -197,8 +188,7 @@ export default function Home() {
 
                 <div className="flex justify-between items-center mt-6">
                   <div className="flex items-center text-lg font-semibold">
-                    {post.likes.length}{" "}
-                    {post.likes.length === 1 ? "Like" : "Likes"}
+                    {post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
                   </div>
                   <button
                     onClick={() => handleLike(post._id)}
@@ -208,22 +198,17 @@ export default function Home() {
                         : "bg-gray-200 hover:bg-gray-300 text-gray-600"
                     }`}
                   >
-                    <span className="text-xl">
-                      {post.likes.includes(userId) ? "❤️" : "🤍"}
-                    </span>{" "}
+                    <span className="text-xl">{post.likes.includes(userId) ? "❤️" : "🤍"}</span>{" "}
                     Like
                   </button>
                 </div>
               </div>
             ))
           ) : (
-            <p className="text-gray-500 text-center text-lg">
-              No posts available.
-            </p>
+            <p className="text-gray-500 text-center text-lg">No posts available.</p>
           )}
         </main>
       </div>
     </Layout>
   );
 }
-

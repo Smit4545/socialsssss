@@ -1,7 +1,7 @@
 // "use client";
 
 // import { useState, useEffect, useRef } from "react";
-// import { useSocket } from "../../../../lib/socket"; 
+// import { useSocket } from "../../../../lib/socket";
 // import { useRouter, useParams } from "next/navigation";
 // import moment from "moment";
 
@@ -17,7 +17,7 @@
 
 //   const [messages, setMessages] = useState([]);
 //   const [newMessage, setNewMessage] = useState("");
-//   const { socket, isConnected } = useSocket(); 
+//   const { socket, isConnected } = useSocket();
 
 //   const messagesEndRef = useRef(null);
 
@@ -79,7 +79,7 @@
 //           onClick={() => router.push("/friends")}
 //           className="text-xl bg-gray-700 font-semibold text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition-all duration-300"
 //         >
-//           ⬅ 
+//           ⬅
 //         </button>
 //       </div>
 
@@ -128,14 +128,12 @@
 //           type="submit"
 //           className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-5 py-3 rounded-full font-medium hover:scale-105 shadow-md transition-all duration-300"
 //         >
-//         ➤ 
+//         ➤
 //         </button>
 //       </form>
 //     </div>
 //   );
 // }
-
-
 
 "use client";
 
@@ -144,6 +142,11 @@ import { useSocket } from "../../../../lib/socket";
 import { useRouter, useParams } from "next/navigation";
 import moment from "moment";
 import SimplePeer from "simple-peer";
+import VideoCallIcon from "@mui/icons-material/VideoCall";
+import CallEndIcon from "@mui/icons-material/CallEnd";
+import RingVolumeIcon from "@mui/icons-material/RingVolume";
+import PhoneDisabledIcon from "@mui/icons-material/PhoneDisabled";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function Chat() {
   const router = useRouter();
@@ -249,11 +252,9 @@ export default function Chat() {
       peer.on("stream", (remoteStream) => {
         console.log(remoteStream); // Log to verify if remoteStream is available
         console.log(friendVideoRef.current);
-          friendVideoRef.current.srcObject = remoteStream;
-          friendVideoRef.current.play();
-      
+        friendVideoRef.current.srcObject = remoteStream;
+        friendVideoRef.current.play();
       });
-      
 
       peer.on("connect", () => {
         setIsCallConnected(true);
@@ -262,7 +263,7 @@ export default function Chat() {
   };
 
   // ✅ Accept an incoming call
-  const acceptCall = async() => {
+  const acceptCall = async () => {
     setCallAccepted(true);
     setShowVideo(true);
 
@@ -279,14 +280,12 @@ export default function Chat() {
         socket.emit("accept-call", { signal, from: incomingCall.from });
       });
 
-      peer.on("stream", async(remoteStream) => {
+      peer.on("stream", async (remoteStream) => {
         console.log(remoteStream);
         console.log(friendVideoRef.current);
-          friendVideoRef.current.srcObject = remoteStream;
-          friendVideoRef.current.play();
-       
+        friendVideoRef.current.srcObject = remoteStream;
+        friendVideoRef.current.play();
       });
-      
 
       peer.on("connect", () => {
         setIsCallConnected(true);
@@ -303,20 +302,20 @@ export default function Chat() {
   // 🔴 End a call
   const endCall = () => {
     // Stop the local media stream (video/audio)
-    myVideoRef.current.srcObject.getTracks().forEach((track) => track.stop());
-    
+    myVideoRef.current?.srcObject?.getTracks().forEach((track) => track.stop());
+
     // Clear the video elements
     if (friendVideoRef.current) {
       friendVideoRef.current.srcObject = null; // Clear friend's video
     }
-  
+
     if (myVideoRef.current) {
       myVideoRef.current.srcObject = null; // Clear your own video if needed
     }
-  
+
     // Emit "end-call" event
     socket.emit("end-call", { userToEnd: friendId });
-  
+
     // Reset all states
     setIsCalling(false);
     setShowVideo(false);
@@ -324,7 +323,6 @@ export default function Chat() {
     setCallAccepted(false);
     setIsCallConnected(false);
   };
-  
 
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
@@ -343,22 +341,22 @@ export default function Chat() {
               onClick={startCall}
               className="bg-green-500 px-4 py-2 rounded-lg text-white font-bold shadow-md hover:bg-green-600 transition-all duration-300"
             >
-              📞 Call
+              <VideoCallIcon />
             </button>
           ) : (
             <button
               onClick={endCall}
               className="bg-red-500 px-4 py-2 rounded-lg text-white font-bold shadow-md hover:bg-red-600 transition-all duration-300"
             >
-              🔴 End Call
+              <CallEndIcon />
             </button>
           )}
 
           <button
-            onClick={() => router.push('/friends')}
+            onClick={() => router.push("/friends")}
             className="text-xl bg-gray-700 font-semibold text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition-all duration-300"
           >
-            ⬅
+            <ArrowBackIcon />
           </button>
         </div>
       </div>
@@ -366,12 +364,15 @@ export default function Chat() {
       {/* Chat Messages */}
       <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-800">
         {messages.map((msg, index) => (
-          <div key={index} className={`flex ${msg.senderId === userId ? 'justify-end' : 'justify-start'}`}>
+          <div
+            key={index}
+            className={`flex ${msg.senderId === userId ? "justify-end" : "justify-start"}`}
+          >
             <div
               className={`p-4 rounded-2xl max-w-xs shadow-lg text-sm transition-all duration-300 ${
                 msg.senderId === userId
-                  ? 'bg-wheat text-white font-extrabold text-lg rounded-br-none'
-                  : 'bg-gray-500 text-white font-extrabold text-lg rounded-bl-none'
+                  ? "bg-wheat text-white font-extrabold text-lg rounded-br-none"
+                  : "bg-gray-500 text-white font-extrabold text-lg rounded-bl-none"
               }`}
             >
               <p className="text-xs uppercase font-bold text-black mb-1">
@@ -379,7 +380,7 @@ export default function Chat() {
               </p>
               <p>{msg.message}</p>
               <span className="text-xs text-black mt-2 block">
-                {moment(msg.createdAt).format('h:mm A')}
+                {moment(msg.createdAt).format("h:mm A")}
               </span>
             </div>
           </div>
@@ -415,13 +416,13 @@ export default function Chat() {
             onClick={acceptCall}
             className="bg-green-500 px-4 py-2 rounded-lg text-white font-bold shadow-md mr-2"
           >
-            ✅ Accept
+            <RingVolumeIcon />
           </button>
           <button
             onClick={rejectCall}
             className="bg-red-500 px-4 py-2 rounded-lg text-white font-bold shadow-md"
           >
-            ❌ Reject
+            <PhoneDisabledIcon />
           </button>
         </div>
       )}
@@ -429,10 +430,19 @@ export default function Chat() {
       {/* Video Call Section */}
       {showVideo && (
         <div className="flex justify-center items-center space-x-4">
-        <video ref={myVideoRef} autoPlay muted  className="w-56 h-44 border-2 border-white rounded-lg" />
-        <video ref={friendVideoRef} autoPlay  className="w-56 h-44 border-2 border-white rounded-lg" />
-     </div>
-     )}
+          <video
+            ref={myVideoRef}
+            autoPlay
+            muted
+            className="w-56 h-44 border-2 border-white rounded-lg"
+          />
+          <video
+            ref={friendVideoRef}
+            autoPlay
+            className="w-56 h-44 border-2 border-white rounded-lg"
+          />
+        </div>
+      )}
     </div>
   );
 }

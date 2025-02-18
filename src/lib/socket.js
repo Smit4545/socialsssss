@@ -6,9 +6,9 @@ export const useSocket = () => {
 
   useEffect(() => {
     const serverUrl =
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? "http://localhost:3000" // Local development URL
-        : "https://5b0b-2401-4900-1c80-a3e0-480f-d842-a400-853f.ngrok-free.app"; // ngrok URL
+        : "https://e6f3-2401-4900-1c80-a3e0-b034-f274-1ad2-732f.ngrok-free.app"; // ngrok URL
 
     const socketInstance = io(serverUrl, {
       path: "/api/socket.io",
@@ -16,7 +16,6 @@ export const useSocket = () => {
 
     setSocket(socketInstance);
 
-    
     return () => {
       socketInstance.disconnect();
     };

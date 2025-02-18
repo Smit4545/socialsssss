@@ -36,7 +36,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-400 via-pink-400 to-red-400">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-700 to-gray-900">
       <div className="w-full max-w-md p-8 space-y-6 bg-white/70 backdrop-blur-lg shadow-2xl rounded-2xl">
         <h2 className="text-3xl font-extrabold text-center text-gray-900">Create an Account</h2>
         <p className="text-center text-gray-600">Join us and explore amazing features! </p>
@@ -51,7 +51,7 @@ const SignIn = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="w-full px-4 py-3 text-gray-800 bg-transparent border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer"
+              className="w-full px-4 py-3 text-gray-800 bg-transparent border-2 border-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer"
               placeholder=" "
             />
             <label
@@ -71,7 +71,7 @@ const SignIn = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 text-gray-800 bg-transparent border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer"
+              className="w-full px-4 py-3 text-gray-800 bg-transparent border-2 border-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer"
               placeholder=" "
             />
             <label
@@ -91,7 +91,7 @@ const SignIn = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 text-gray-800 bg-transparent border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer"
+              className="w-full px-4 py-3 text-gray-800 bg-transparent border-2 border-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer"
               placeholder=" "
             />
             <label
@@ -110,7 +110,7 @@ const SignIn = () => {
               name="image"
               value={image}
               onChange={(e) => setImage(e.target.value)}
-              className="w-full px-4 py-3 text-gray-800 bg-transparent border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer"
+              className="w-full px-4 py-3 text-gray-800 bg-transparent border-2 border-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer"
               placeholder=" "
             />
             <label
@@ -127,9 +127,9 @@ const SignIn = () => {
           {/* Sign Up Button */}
           <button
             type="submit"
-            className="w-full px-4 py-3 text-white font-bold bg-gradient-to-r from-indigo-500 to-blue-600 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+            className="w-full px-4 py-3 text-white font-bold bg-gradient-to-r rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-all"
           >
-            Sign Up 
+            Sign Up
           </button>
         </form>
 
