@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 export default function CreatePost() {
   const [content, setContent] = useState("");
-  const userId = localStorage.getItem("userId");
+  const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
   const router = useRouter();
 
   const handleCreatePost = async () => {
@@ -20,7 +20,7 @@ export default function CreatePost() {
 
       if (response.data.message) {
         alert("Post created successfully");
-        router.push("/");  // Redirect back to the home page after post creation
+        router.push("/"); // Redirect back to the home page after post creation
       }
     } catch (error) {
       console.error("Error creating post:", error);
