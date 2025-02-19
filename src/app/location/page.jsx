@@ -10,8 +10,15 @@ export default function LiveLocation() {
   const [userLocation, setUserLocation] = useState(null);
   const [allUsers, setAllUsers] = useState({});
   const [error, setError] = useState("");
-  const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
-  const username = typeof window !== "undefined" ? localStorage.getItem("username") : "You";
+  const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState("You");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setUserId(localStorage.getItem("userId"));
+      setUsername(localStorage.getItem("username") || "You");
+    }
+  }, []);
 
   const defaultIcon = new L.Icon({
     iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
