@@ -28,35 +28,34 @@ import mongoose from "mongoose";
 const MONGODB_URI = process.env.MONGO_URI;
 
 if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable.");
+  throw new Error("❌ Please define the MONGO_URI environment variable.");
 }
 
-// Ensure caching for Next.js Hot Reloading
-if (!global.mongoose) {
-  global.mongoose = { conn: null, promise: null };
-}
+// Ensure global caching for Next.js Fast Refresh
+let cached = globalThis.mongoose || { conn: null, promise: null };
+globalThis.mongoose = cached;
 
 async function dbConnect() {
-  if (global.mongoose.conn) return global.mongoose.conn;
+  if (cached.conn) return cached.conn;
 
-  if (!global.mongoose.promise) {
-    global.mongoose.promise = mongoose
+  if (!cached.promise) {
+    cached.promise = mongoose
       .connect(MONGODB_URI, {
-        dbName: "Social", // Ensure the correct database name
+        dbName: "Social", // Make sure this matches your MongoDB database name
         bufferCommands: false,
       })
       .then((mongoose) => {
-        console.log("✅ Database connected successfully");
+        console.log("✅ MongoDB Connected Successfully");
         return mongoose;
       })
       .catch((error) => {
-        console.error("❌ Database connection error:", error);
-        process.exit(1);
+        console.error("❌ MongoDB Connection Failed:", error);
+        process.exit(1); // Exit process on failure
       });
   }
 
-  global.mongoose.conn = await global.mongoose.promise;
-  return global.mongoose.conn;
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
 
 export default dbConnect;
