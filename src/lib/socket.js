@@ -6,9 +6,9 @@ export const useSocket = () => {
 
   useEffect(() => {
     const serverUrl =
-      process.env.NODE_ENV !== "development"
-        ? "http://localhost:3000" // Local development URL
-        : "https://socialsssss.vercel.app"; // ngrok URL
+      // process.env.NODE_ENV !== "development"
+      //   ? "http://localhost:3000" // Local development URL
+      "https://socialsssss.vercel.app"; // ngrok URL
 
     const socketInstance = io(serverUrl, {
       path: "/api/socket.io",
