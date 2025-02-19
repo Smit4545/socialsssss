@@ -44,8 +44,6 @@ async function dbConnect() {
       .connect(MONGODB_URI, {
         dbName: "Social", // Ensure the correct database name
         bufferCommands: false,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
       })
       .then((mongoose) => {
         console.log("✅ Database connected successfully");
