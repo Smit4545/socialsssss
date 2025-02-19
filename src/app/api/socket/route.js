@@ -1,5 +1,5 @@
 const { createServer } = require("http");
-const next = require("next");
+import next from "next";
 const { Server } = require("socket.io");
 
 const dev = process.env.NODE_ENV !== "production";
