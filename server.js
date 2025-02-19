@@ -105,7 +105,7 @@ const next = require("next");
 const { Server } = require("socket.io");
 
 const dev = process.env.NODE_ENV !== "production";
-const hostname = "socialsssss.vercel.app";
+const hostname = "socialsssss.onrender.com";
 const port = 3000;
 
 const app = next({ dev, hostname, port });
@@ -119,7 +119,11 @@ app.prepare().then(() => {
   const io = new Server(httpServer, {
     path: "/api/socket.io",
     cors: {
-      origin: ["http://localhost:3000", "https://socialsssss.vercel.app"],
+      origin: [
+        "http://localhost:3000",
+        "https://socialsssss.vercel.app",
+        "https://socialsssss.onrender.com",
+      ],
       methods: ["GET", "POST"],
     },
   });
