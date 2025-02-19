@@ -27,7 +27,7 @@ const LogIn = () => {
         document.cookie = `userId=${data.id}; path=/; max-age=3600`;
         localStorage.setItem("userId", data.id);
         localStorage.setItem("username", data.name);
-        router.push(`${process.env.URL}`);
+        router.push(`/`);
       } else {
         setError(data.error || "Failed to log in");
       }
