@@ -28,7 +28,7 @@ const SignIn = () => {
         throw new Error(data.error || "Something went wrong.");
       }
 
-      router.push("/Login");
+      router.replace("/Login");
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
       console.error(err);
