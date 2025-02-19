@@ -119,10 +119,7 @@ app.prepare().then(() => {
   const io = new Server(httpServer, {
     path: "/api/socket.io",
     cors: {
-      origin: [
-        "http://localhost:3000",
-        "https://e6f3-2401-4900-1c80-a3e0-b034-f274-1ad2-732f.ngrok-free.app",
-      ],
+      origin: ["http://localhost:3000", "https://socialsssss.vercel.app"],
       methods: ["GET", "POST"],
     },
   });
