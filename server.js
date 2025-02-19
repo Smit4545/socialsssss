@@ -105,7 +105,7 @@ const next = require("next");
 const { Server } = require("socket.io");
 
 const dev = process.env.NODE_ENV !== "production";
-const hostname = "socialsssss.vercel.app";
+const hostname = "localhost";
 const port = 3000;
 
 const app = next({ dev, hostname, port });
