@@ -63,6 +63,12 @@ import mongoose from "mongoose";
 
 let isConnected = false;
 
+const MONGODB_URI = process.env.MONGO_URI;
+
+if (!MONGODB_URI) {
+  throw new Error("❌ Please define the MONGO_URI environment variable.");
+}
+
 const dbConnect = async () => {
   if (isConnected) {
     console.log("Database is already connected");
@@ -70,7 +76,7 @@ const dbConnect = async () => {
   }
 
   try {
-    const db = await mongoose.connect(`${process.env.MONGO_URI}`, {
+    const db = await mongoose.connect(MONGODB_URI, {
       dbName: "Social",
     });
 
