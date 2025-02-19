@@ -14,10 +14,8 @@ export default function LiveLocation() {
   const [username, setUsername] = useState("You");
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setUserId(localStorage.getItem("userId"));
-      setUsername(localStorage.getItem("username") || "You");
-    }
+    setUserId(localStorage.getItem("userId"));
+    setUsername(localStorage.getItem("username") || "You");
   }, []);
 
   const defaultIcon = new L.Icon({
