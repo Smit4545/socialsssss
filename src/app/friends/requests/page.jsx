@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function FriendRequests() {
-  const userId = localStorage.getItem("userId"); // Get the logged-in user ID dynamically
+  const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
   const [pendingRequests, setPendingRequests] = useState([]);
   const [message, setMessage] = useState("");
   const [name, setName] = useState();
@@ -15,25 +15,25 @@ export default function FriendRequests() {
       try {
         const res = await axios.get(`/api/showreq/${userId}`);
         setPendingRequests(res.data.pendingRequests);
-         // Set pending requests
+        // Set pending requests
         const senderNames = {};
-        res.data.users?.forEach(user => {
+        res.data.users?.forEach((user) => {
           senderNames[user._id] = user.username;
         });
-        console.log(senderNames)
+        console.log(senderNames);
         setName(senderNames);
       } catch (error) {
         console.error("Error fetching pending friend requests:", error);
       }
     };
-    console.log(name)
+    console.log(name);
     fetchPendingRequests();
-  }, [userId,setPendingRequests]);
+  }, [userId, setPendingRequests]);
 
   const handleAcceptRequest = async (senderId) => {
     try {
       const res = await axios.post("/api/friendrequests/accept", {
-       userId:senderId,
+        userId: senderId,
         requestId: userId,
       });
 
@@ -55,7 +55,7 @@ export default function FriendRequests() {
       <div className="space-y-4 mb-6">
         {message && <p className="text-green-600">{message}</p>}
 
-        {!pendingRequests? (
+        {!pendingRequests ? (
           <p className="text-gray-500">You have no pending requests.</p>
         ) : (
           pendingRequests?.map((request) => (
