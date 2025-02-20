@@ -102,8 +102,9 @@ export default function Layout({ children }) {
 
   return (
     <div className="min-h-screen  flex flex-col">
-      <header className="bg-red-900 text-white px-4 py-3 flex items-center justify-between">
-        <Link href="/">
+      <header className="bg-red-900 text-white px-6 py-3 flex items-center justify-between shadow-lg">
+        {/* Logo & Branding */}
+        <Link href="/" className="flex items-center space-x-2">
           <Image
             src="/logo.webp"
             alt="Socialsssss Logo"
@@ -111,42 +112,50 @@ export default function Layout({ children }) {
             height={50}
             className="rounded-full"
           />
-          Socialsssss
+          <span className="text-xl font-bold hidden md:inline">Socialsssss</span>
         </Link>
-        <div className="flex items-center space-x-4">
-          <nav className="hidden lg:flex space-x-4">
-            <Tooltip title="Friends" arrow>
-              <Link href="/friends">
-                <PeopleAltIcon style={{ color: "white", height: "40px", width: "50px" }} />
-              </Link>
-            </Tooltip>
-            <Tooltip title="Profile" arrow>
-              <Link href="/profile">
-                <AccountBoxOutlinedIcon style={{ color: "white", height: "40px", width: "50px" }} />
-              </Link>
-            </Tooltip>
-            <Tooltip title="Location" arrow>
-              <Link href="/location">
-                <LocationOnIcon style={{ color: "white", height: "40px", width: "50px" }} />
-              </Link>
-            </Tooltip>
-          </nav>
 
+        {/* Desktop Navigation */}
+        <nav className="hidden lg:flex items-center space-x-6">
+          <Tooltip title="Friends" arrow>
+            <Link href="/friends">
+              <PeopleAltIcon
+                className="text-white hover:text-gray-300"
+                style={{ height: "40px", width: "50px" }}
+              />
+            </Link>
+          </Tooltip>
+          <Tooltip title="Profile" arrow>
+            <Link href="/profile">
+              <AccountBoxOutlinedIcon
+                className="text-white hover:text-gray-300"
+                style={{ height: "40px", width: "50px" }}
+              />
+            </Link>
+          </Tooltip>
+          <Tooltip title="Location" arrow>
+            <Link href="/location">
+              <LocationOnIcon
+                className="text-white hover:text-gray-300"
+                style={{ height: "40px", width: "50px" }}
+              />
+            </Link>
+          </Tooltip>
+        </nav>
+
+        {/* Right Section */}
+        <div className="flex items-center space-x-4">
           {hasToken && userId && (
             <>
+              {/* Friend Requests */}
               <div className="relative">
                 <button
                   onClick={toggleFriendRequests}
-                  className="bg-black px-3 py-2 rounded-lg font-bold"
+                  className="bg-black px-3 py-2 rounded-lg font-bold hover:bg-gray-800"
                 >
                   <Badge badgeContent={pendingRequests.length} color="success">
-                    <MailIcon color="action" style={{ color: "white" }} />
+                    <MailIcon className="text-white" />
                   </Badge>
-                  {/* {pendingRequests.length > 0 && (
-                    <span className="ml-2 bg-blue-500 text-white text-sm px-2 py-1 rounded-full">
-                      {pendingRequests.length}
-                    </span>
-                  )} */}
                 </button>
                 {isFriendRequestsOpen && (
                   <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg text-black z-50">
@@ -159,14 +168,12 @@ export default function Layout({ children }) {
                             className="p-3 hover:bg-gray-100 flex justify-between items-center"
                           >
                             <span>{name[request.senderId]}</span>
-                            <div className="space-x-2">
-                              <button
-                                onClick={() => handleAcceptRequest(request.senderId)}
-                                className="bg-green-500 text-white px-2 py-1 rounded-lg hover:bg-green-600"
-                              >
-                                <CheckIcon />
-                              </button>
-                            </div>
+                            <button
+                              onClick={() => handleAcceptRequest(request.senderId)}
+                              className="bg-green-500 text-white px-2 py-1 rounded-lg hover:bg-green-600"
+                            >
+                              <CheckIcon />
+                            </button>
                           </li>
                         ))
                       ) : (
@@ -176,6 +183,8 @@ export default function Layout({ children }) {
                   </div>
                 )}
               </div>
+
+              {/* Logout Button */}
               <button
                 onClick={handleLogout}
                 className="bg-black px-3 py-2 rounded-lg font-bold hover:bg-red-700"
@@ -185,6 +194,7 @@ export default function Layout({ children }) {
             </>
           )}
 
+          {/* Mobile Menu Button */}
           <button
             id="menu-button"
             aria-label="Toggle Menu"
@@ -195,7 +205,6 @@ export default function Layout({ children }) {
           </button>
         </div>
       </header>
-
       {isMenuOpen && (
         <nav className="lg:hidden bg-red-800 text-white p-4 space-y-2">
           <Link href="/">
