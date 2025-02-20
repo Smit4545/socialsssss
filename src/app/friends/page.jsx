@@ -105,7 +105,7 @@ export default async function FriendsPage() {
     <div className="min-h-screen bg-reddd py-10 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-10">
-          <h1 className="text-5xl font-extrabold text-white text-center md:text-left mb-6 md:mb-0 drop-shadow-lg">
+          <h1 className="text-5xl font-extrabold text-black text-center md:text-left mb-6 md:mb-0 drop-shadow-lg">
             Your Friends 👥
           </h1>
           <Link href="/friends/add">
@@ -124,7 +124,7 @@ export default async function FriendsPage() {
                 <div className="w-24 h-24 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-full flex items-center justify-center text-3xl font-bold shadow-md mb-4">
                   {friend.name[0].toUpperCase()}
                 </div>
-                <h3 className="text-2xl font-semibold uppercase text-white">{friend.name}</h3>
+                <h3 className="text-2xl font-bold uppercase text-black">{friend.name}</h3>
                 <p className="text-gray-200">{friend.email}</p>
                 <ChatButton userId={friend.userId} name={friend.name} />
               </div>
