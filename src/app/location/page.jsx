@@ -130,9 +130,12 @@ export default function LiveLocation() {
   const [isClient, setIsClient] = useState(false); // ✅ Fix for window-related issues
 
   useEffect(() => {
-    setIsClient(true); // ✅ Ensure code runs only in the browser
-    setUserId(localStorage.getItem("userId") || null);
-    setUsername(localStorage.getItem("username") || "You");
+    setIsClient(true);
+    if (typeof window !== "undefined") {
+      // ✅ Ensure code runs only in the browser
+      setUserId(localStorage.getItem("userId") || null);
+      setUsername(localStorage.getItem("username") || "You");
+    }
   }, []);
 
   const defaultIcon = new L.Icon({
