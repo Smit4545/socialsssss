@@ -168,14 +168,12 @@ export default function Home() {
               >
                 <div className="flex items-center space-x-4">
                   <div
-                    className={`w-16 h-16 text-black rounded-full text-xl flex items-center justify-center font-bold uppercase ${
-                      post.likes.includes(userId) ? "bg-wheat" : "bg-wheat"
-                    }`}
+                    className={`w-16 h-16 text-white rounded-full text-xl flex items-center justify-center font-extrabold uppercase bg-gradient-to-r from-yellow-400 to-orange-500`}
                   >
                     {post.name[0].toUpperCase()}
                   </div>
                   <div>
-                    <h2 className="text-xl font-semibold uppercase">{post.name}</h2>
+                    <h2 className="text-2xl font-extrabold uppercase">{post.name}</h2>
                     <p className="text-sm">
                       {formatDistanceToNow(new Date(post.createdAt), {
                         addSuffix: true,
