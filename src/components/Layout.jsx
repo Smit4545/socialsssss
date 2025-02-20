@@ -104,7 +104,13 @@ export default function Layout({ children }) {
     <div className="min-h-screen  flex flex-col">
       <header className="bg-red-900 text-white px-4 py-3 flex items-center justify-between">
         <Link href="/">
-          <Image src="/logo.webp" alt="Socialsssss Logo" width={150} height={50} />
+          <Image
+            src="/logo.webp"
+            alt="Socialsssss Logo"
+            width={50}
+            height={50}
+            className="rounded-full"
+          />
         </Link>
         <div className="flex items-center space-x-4">
           <nav className="hidden lg:flex space-x-4">
