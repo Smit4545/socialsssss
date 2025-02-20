@@ -103,7 +103,7 @@ export default function Home() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-500"></div>
         </div>
       ) : null}
-      <div className="bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 min-h-screen relative">
+      <div className="bg-reddd min-h-screen relative">
         {/* Floating Create Post Button
         <button
           onClick={() => setIsModalOpen(true)}

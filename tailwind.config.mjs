@@ -14,6 +14,7 @@ const config = {
         marron: "#964B00", // or any other marron color code
         wheat: "#F5DEB3", // or any other wheat color code
         redd: "#901B40",
+        reddd: "#F5E1E6",
       },
     },
   },
