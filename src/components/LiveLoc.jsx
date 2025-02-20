@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic"; // ✅ Dynamically import react-leaflet
-import { useSocket } from "../../lib/socket";
+import { useSocket } from "../lib/socket";
 import L from "leaflet";
 
 // ✅ Dynamically import react-leaflet components (Prevents SSR issues)
