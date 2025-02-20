@@ -146,8 +146,8 @@ export default function Layout({ children }) {
           <Image
             src="/logo2.webp"
             alt="Socialsssss Logo"
-            width={50}
-            height={50}
+            width={75}
+            height={75}
             className="rounded-full"
           />
           <span className="text-xl font-bold hidden md:inline">Socialsssss</span>
