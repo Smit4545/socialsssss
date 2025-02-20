@@ -103,7 +103,7 @@ export default function Layout({ children }) {
     <div className="min-h-screen  flex flex-col">
       <header className="bg-red-900 text-white px-4 py-3 flex items-center justify-between">
         <Link href="/">
-          <div className="text-2xl font-extrabold">Socialsssss</div>
+          <Image src="/logo.webp" alt="Socialsssss Logo" width={150} height={50} />
         </Link>
         <div className="flex items-center space-x-4">
           <nav className="hidden lg:flex space-x-4">
