@@ -14,6 +14,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import CheckIcon from "@mui/icons-material/Check";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Tooltip from "@mui/material/Tooltip";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function Layout({ children }) {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -182,55 +183,62 @@ export default function Layout({ children }) {
 
         {/* Right Section */}
         <div className="flex items-center space-x-4">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="fixed top-16 right-6 bg-gray-900 text-white px-4 py-1 rounded-full shadow-lg hover:bg-wheat transition z-50"
-          >
-            ➕
-          </button>
-
-          {/* Modal (Ensuring it's in front) */}
-          {isModalOpen && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div
-                ref={modalRef}
-                className="bg-white p-6 rounded-2xl shadow-2xl max-w-lg w-full transition-all relative z-50"
-              >
-                <h2 className="text-xl font-bold mb-4">Create a New Post</h2>
-                <form onSubmit={handleCreatePost}>
-                  <textarea
-                    value={newPostContent}
-                    onChange={(e) => setNewPostContent(e.target.value)}
-                    placeholder="What's on your mind?"
-                    rows="4"
-                    className="w-full border border-gray-300 rounded-xl p-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  />
-                  <div className="flex justify-end gap-4 mt-4">
-                    <button
-                      type="button"
-                      onClick={() => setIsModalOpen(false)}
-                      className="px-4 py-2 bg-gray-300 rounded-lg"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={!newPostContent}
-                      className={`px-6 py-2 rounded-lg text-white ${
-                        newPostContent
-                          ? "bg-gray-900 hover:bg-blue-600"
-                          : "bg-gray-400 cursor-not-allowed"
-                      }`}
-                    >
-                      Post
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
+          {/* Create Post Button */}
           {hasToken && userId && (
             <>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="fixed top-16 right-6 bg-gray-900 text-white px-4 py-2 rounded-full shadow-lg hover:bg-gray-800 transition z-50"
+              >
+                <Tooltip title="Location" arrow>
+                  <AddIcon
+                    className="text-white hover:text-gray-300"
+                    style={{ height: "40px", width: "50px" }}
+                  />
+                </Tooltip>
+              </button>
+
+              {/* Modal for Creating Post */}
+              {isModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                  <div
+                    ref={modalRef}
+                    className="bg-white p-6 rounded-2xl shadow-2xl max-w-lg w-full transition-all relative z-50"
+                  >
+                    <h2 className="text-xl font-bold mb-4">Create a New Post</h2>
+                    <form onSubmit={handleCreatePost}>
+                      <textarea
+                        value={newPostContent}
+                        onChange={(e) => setNewPostContent(e.target.value)}
+                        placeholder="What's on your mind?"
+                        rows="4"
+                        className="w-full border border-gray-300 rounded-xl p-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      />
+                      <div className="flex justify-end gap-4 mt-4">
+                        <button
+                          type="button"
+                          onClick={() => setIsModalOpen(false)}
+                          className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 transition"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={!newPostContent}
+                          className={`px-6 py-2 rounded-lg text-white transition ${
+                            newPostContent
+                              ? "bg-gray-900 hover:bg-blue-600"
+                              : "bg-gray-400 cursor-not-allowed"
+                          }`}
+                        >
+                          Post
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+
               {/* Friend Requests */}
               <div className="relative">
                 <button
@@ -254,7 +262,7 @@ export default function Layout({ children }) {
                             <span>{name[request.senderId]}</span>
                             <button
                               onClick={() => handleAcceptRequest(request.senderId)}
-                              className="bg-green-500 text-white px-2 py-1 rounded-lg hover:bg-green-600"
+                              className="bg-green-500 text-white px-2 py-1 rounded-lg hover:bg-green-600 transition"
                             >
                               <CheckIcon />
                             </button>
@@ -271,7 +279,7 @@ export default function Layout({ children }) {
               {/* Logout Button */}
               <button
                 onClick={handleLogout}
-                className="bg-black px-3 py-2 rounded-lg font-bold hover:bg-red-700"
+                className="bg-black px-3 py-2 rounded-lg font-bold hover:bg-red-700 transition"
               >
                 <LogoutSharpIcon />
               </button>
@@ -282,7 +290,7 @@ export default function Layout({ children }) {
           <button
             id="menu-button"
             aria-label="Toggle Menu"
-            className="lg:hidden bg-gray-700 px-3 py-2 rounded-lg font-bold hover:bg-gray-600"
+            className="lg:hidden bg-gray-700 px-3 py-2 rounded-lg font-bold hover:bg-gray-600 transition"
             onClick={toggleMenu}
           >
             {isMenuOpen ? "✖" : "☰"}

@@ -62,39 +62,39 @@ export default function Home() {
     }
   };
 
-  const handleCreatePost = async (e) => {
-    e.preventDefault();
+  // const handleCreatePost = async (e) => {
+  //   e.preventDefault();
 
-    try {
-      await axios.post("/api/posts", {
-        userId,
-        content: newPostContent,
-      });
-      setNewPostContent("");
-      fetchPosts();
-      setIsModalOpen(false);
-      toast.success("Post created successfully!"); // Success toast
-    } catch (error) {
-      console.error("Error creating post:", error);
-      toast.error("Error creating post"); // Error toast
-    }
-  };
+  //   try {
+  //     await axios.post("/api/posts", {
+  //       userId,
+  //       content: newPostContent,
+  //     });
+  //     setNewPostContent("");
+  //     fetchPosts();
+  //     setIsModalOpen(false);
+  //     toast.success("Post created successfully!"); // Success toast
+  //   } catch (error) {
+  //     console.error("Error creating post:", error);
+  //     toast.error("Error creating post"); // Error toast
+  //   }
+  // };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setIsModalOpen(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (modalRef.current && !modalRef.current.contains(event.target)) {
+  //       setIsModalOpen(false);
+  //     }
+  //   };
 
-    if (isModalOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
+  //   if (isModalOpen) {
+  //     document.addEventListener("mousedown", handleClickOutside);
+  //   } else {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   }
 
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isModalOpen]);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // }, [isModalOpen]);
 
   return (
     <Layout>
@@ -104,7 +104,7 @@ export default function Home() {
         </div>
       ) : null}
       <div className="bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 min-h-screen relative">
-        {/* Floating Create Post Button */}
+        {/* Floating Create Post Button
         <button
           onClick={() => setIsModalOpen(true)}
           className="fixed top-16 right-6 bg-gray-900 text-white px-4 py-1 rounded-full shadow-lg hover:bg-wheat transition z-50"
@@ -113,7 +113,7 @@ export default function Home() {
         </button>
 
         {/* Modal (Ensuring it's in front) */}
-        {isModalOpen && (
+        {/* {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div
               ref={modalRef}
@@ -151,7 +151,7 @@ export default function Home() {
               </form>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Feed Section */}
         <main className="max-w-5xl mx-auto px-4 space-y-8 mt-8 relative z-10">
