@@ -11,6 +11,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import CheckIcon from "@mui/icons-material/Check";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 export default function Layout({ children }) {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -111,6 +112,9 @@ export default function Layout({ children }) {
             <Link href="/profile">
               <AccountBoxOutlinedIcon style={{ color: "white", height: "40px", width: "50px" }} />
             </Link>
+            <Link href="/location">
+              <LocationOnIcon style={{ color: "white", height: "40px", width: "50px" }} />
+            </Link>
           </nav>
 
           {hasToken && userId && (
@@ -190,6 +194,11 @@ export default function Layout({ children }) {
           <Link href="/profile">
             <p className="block p-3 hover:bg-gray-700 rounded-lg font-bold cursor-pointer">
               Profile
+            </p>
+          </Link>
+          <Link href="/location">
+            <p className="block p-3 hover:bg-gray-700 rounded-lg font-bold cursor-pointer">
+              Track Location
             </p>
           </Link>
         </nav>

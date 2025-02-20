@@ -27,7 +27,6 @@ const SignIn = () => {
         const data = await response.json();
         throw new Error(data.error || "Something went wrong.");
       }
-
       window.location.href = "/Login";
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
