@@ -24,6 +24,9 @@ export default function Layout({ children }) {
   const [hasToken, setHasToken] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [currentChildren, setCurrentChildren] = useState(children);
+  const [newPostContent, setNewPostContent] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modalRef = useRef(null);
   const router = useRouter();
 
   const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
@@ -100,6 +103,40 @@ export default function Layout({ children }) {
     router.push("/Login");
   };
 
+  const handleCreatePost = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post("/api/posts", {
+        userId,
+        content: newPostContent,
+      });
+      setNewPostContent("");
+      fetchPosts();
+      setIsModalOpen(false);
+      toast.success("Post created successfully!"); // Success toast
+    } catch (error) {
+      console.error("Error creating post:", error);
+      toast.error("Error creating post"); // Error toast
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setIsModalOpen(false);
+      }
+    };
+
+    if (isModalOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isModalOpen]);
+
   return (
     <div className="min-h-screen  flex flex-col">
       <header className="bg-red-900 text-white px-6 py-3 flex items-center justify-between shadow-lg">
@@ -145,6 +182,53 @@ export default function Layout({ children }) {
 
         {/* Right Section */}
         <div className="flex items-center space-x-4">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="fixed top-16 right-6 bg-gray-900 text-white px-4 py-1 rounded-full shadow-lg hover:bg-wheat transition z-50"
+          >
+            ➕
+          </button>
+
+          {/* Modal (Ensuring it's in front) */}
+          {isModalOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div
+                ref={modalRef}
+                className="bg-white p-6 rounded-2xl shadow-2xl max-w-lg w-full transition-all relative z-50"
+              >
+                <h2 className="text-xl font-bold mb-4">Create a New Post</h2>
+                <form onSubmit={handleCreatePost}>
+                  <textarea
+                    value={newPostContent}
+                    onChange={(e) => setNewPostContent(e.target.value)}
+                    placeholder="What's on your mind?"
+                    rows="4"
+                    className="w-full border border-gray-300 rounded-xl p-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                  <div className="flex justify-end gap-4 mt-4">
+                    <button
+                      type="button"
+                      onClick={() => setIsModalOpen(false)}
+                      className="px-4 py-2 bg-gray-300 rounded-lg"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={!newPostContent}
+                      className={`px-6 py-2 rounded-lg text-white ${
+                        newPostContent
+                          ? "bg-gray-900 hover:bg-blue-600"
+                          : "bg-gray-400 cursor-not-allowed"
+                      }`}
+                    >
+                      Post
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
           {hasToken && userId && (
             <>
               {/* Friend Requests */}
