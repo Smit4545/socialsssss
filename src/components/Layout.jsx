@@ -12,6 +12,7 @@ import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import CheckIcon from "@mui/icons-material/Check";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function Layout({ children }) {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -106,15 +107,21 @@ export default function Layout({ children }) {
         </Link>
         <div className="flex items-center space-x-4">
           <nav className="hidden lg:flex space-x-4">
-            <Link href="/friends">
-              <PeopleAltIcon style={{ color: "white", height: "40px", width: "50px" }} />
-            </Link>
-            <Link href="/profile">
-              <AccountBoxOutlinedIcon style={{ color: "white", height: "40px", width: "50px" }} />
-            </Link>
-            <Link href="/location">
-              <LocationOnIcon style={{ color: "white", height: "40px", width: "50px" }} />
-            </Link>
+            <Tooltip title="Friends" arrow>
+              <Link href="/friends">
+                <PeopleAltIcon style={{ color: "white", height: "40px", width: "50px" }} />
+              </Link>
+            </Tooltip>
+            <Tooltip title="Profile" arrow>
+              <Link href="/profile">
+                <AccountBoxOutlinedIcon style={{ color: "white", height: "40px", width: "50px" }} />
+              </Link>
+            </Tooltip>
+            <Tooltip title="Location" arrow>
+              <Link href="/location">
+                <LocationOnIcon style={{ color: "white", height: "40px", width: "50px" }} />
+              </Link>
+            </Tooltip>
           </nav>
 
           {hasToken && userId && (
