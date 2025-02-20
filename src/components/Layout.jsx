@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
 import Badge from "@mui/material/Badge";
