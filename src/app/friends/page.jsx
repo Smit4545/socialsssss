@@ -102,7 +102,7 @@ export default async function FriendsPage() {
   const { friends } = await getFriends(userId);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 py-10 px-6">
+    <div className="min-h-screen bg-reddd py-10 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-10">
           <h1 className="text-5xl font-extrabold text-white text-center md:text-left mb-6 md:mb-0 drop-shadow-lg">
