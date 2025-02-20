@@ -188,7 +188,7 @@ export default function Layout({ children }) {
             <>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-black px-3 py-2 rounded-lg font-bold hover:bg-gray-800"
+                className="bg-black rounded-lg font-bold hover:bg-gray-800"
               >
                 <Tooltip title="Create Post" arrow>
                   <AddIcon
