@@ -111,6 +111,7 @@ export default function Layout({ children }) {
             height={50}
             className="rounded-full"
           />
+          Socialsssss
         </Link>
         <div className="flex items-center space-x-4">
           <nav className="hidden lg:flex space-x-4">
