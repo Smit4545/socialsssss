@@ -161,10 +161,10 @@ export default async function Profile() {
   const { posts } = await postsRes.json();
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-[#1e3c72] via-[#2a5298] to-[#6b73ff] py-10 px-6">
+    <div className="min-h-screen bg-reddd py-10 px-6">
       <div className="max-w-5xl mx-auto">
         <div className="flex justify-between items-center mb-10">
-          <h1 className="text-5xl font-extrabold text-white drop-shadow-lg">Profile</h1>
+          <h1 className="text-5xl font-extrabold text-black drop-shadow-lg">Profile</h1>
           {/* <button
             onClick={() => {
               document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -177,13 +177,15 @@ export default async function Profile() {
           </button> */}
         </div>
         <div className="bg-white/20 backdrop-blur-xl shadow-xl rounded-2xl p-10 flex items-center space-x-8 hover:shadow-2xl transition-all duration-300">
-          <div className="w-32 h-32 bg-gradient-to-br from-pink-500 to-purple-500 text-white rounded-full flex items-center justify-center text-5xl font-bold shadow-lg">
+          <div className="w-32 h-32 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-full flex items-center justify-center text-5xl font-bold shadow-lg">
             {user.username[0].toUpperCase()}
           </div>
           <div>
-            <h1 className="text-4xl font-bold uppercase text-white drop-shadow">{user.username}</h1>
-            <p className="text-xl text-gray-200">{user.email}</p>
-            <p className="text-sm text-gray-300 mt-2">
+            <h1 className="text-4xl font-extrabold uppercase text-black drop-shadow">
+              {user.username}
+            </h1>
+            <p className="text-xl font-bold text-gray-900">{user.email}</p>
+            <p className="text-sm font-bold text-gray-900 mt-2">
               Member since{" "}
               {formatDistanceToNow(new Date(user.createdAt), {
                 addSuffix: true,
@@ -191,22 +193,22 @@ export default async function Profile() {
             </p>
           </div>
         </div>
-        <h2 className="text-4xl font-bold text-white mt-12 mb-6 drop-shadow">Your Posts</h2>
+        <h2 className="text-4xl font-extrabold text-black mt-12 mb-6 drop-shadow">Your Posts</h2>
 
         {posts?.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {posts.map((post) => (
               <div
                 key={post._id}
-                className="bg-white/10 backdrop-blur-lg shadow-lg rounded-lg p-6 border border-white/20 hover:shadow-xl transition-transform transform hover:scale-105"
+                className="bg-slate-200 backdrop-blur-lg shadow-lg rounded-lg p-6 border border-white/20 hover:shadow-xl transition-transform transform hover:scale-105"
               >
                 <div className="flex items-center space-x-4 mb-4">
-                  <div className="w-14 h-14 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full flex items-center justify-center text-xl font-bold shadow-md">
+                  <div className="w-14 h-14 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-full flex items-center justify-center text-xl font-bold shadow-md">
                     {post.name[0].toUpperCase()}
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold uppercase text-white">{post.name}</h3>
-                    <p className="text-sm text-gray-300">
+                    <h3 className="text-xl font-extrabold uppercase text-black">{post.name}</h3>
+                    <p className="text-sm font-bold text-gray-900">
                       {formatDistanceToNow(new Date(post.createdAt), {
                         addSuffix: true,
                       })}
@@ -214,13 +216,15 @@ export default async function Profile() {
                   </div>
                 </div>
 
-                <p className="text-gray-200 text-lg mb-4 leading-relaxed">{post.content}</p>
-                <div className="flex justify-between items-center text-sm text-gray-400">
+                <p className="text-gray-900 text-xl font-bold mb-4 leading-relaxed">
+                  {post.content}
+                </p>
+                <div className="flex justify-between font-bold items-center text-sm text-gray-900">
                   <div>
                     {post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
                   </div>
                   <Link href={`/profile`}>
-                    <button className="text-blue-400 hover:text-blue-300 transition-all">
+                    <button className="text-blue-900 font-bold hover:text-blue-300 transition-all">
                       💬 View Comments
                     </button>
                   </Link>
