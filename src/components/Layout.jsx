@@ -150,7 +150,7 @@ export default function Layout({ children }) {
             height={75}
             className="rounded-full"
           />
-          <span className="text-xl font-bold hidden md:inline">Socialsssss</span>
+          <span className="text-3xl font-extrabold hidden md:inline">Socialsssss</span>
         </Link>
 
         {/* Desktop Navigation */}
