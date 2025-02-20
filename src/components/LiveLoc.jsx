@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { useSocket } from "../../lib/socket";
+import { useSocket } from "../lib/socket";
 import L from "leaflet";
 
 export default function LiveLocation() {
