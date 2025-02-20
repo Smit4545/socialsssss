@@ -28,7 +28,7 @@ const SignIn = () => {
         throw new Error(data.error || "Something went wrong.");
       }
 
-      router.replace("/Login");
+      window.location.href = "/Login";
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
       console.error(err);
