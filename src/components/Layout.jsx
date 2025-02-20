@@ -144,7 +144,7 @@ export default function Layout({ children }) {
         {/* Logo & Branding */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
-            src="/logo.webp"
+            src="/logo2.webp"
             alt="Socialsssss Logo"
             width={50}
             height={50}

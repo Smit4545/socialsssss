@@ -26,7 +26,7 @@ export const config = {
     "/profile", // Profile page
     "/friends", // Friends page
     "/location",
-    "/Login", // Login page
+    "/Login",
     "/signin", // Signin page
   ],
 };
