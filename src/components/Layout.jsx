@@ -245,9 +245,11 @@ export default function Layout({ children }) {
                   onClick={toggleFriendRequests}
                   className="bg-black px-3 py-2 rounded-lg font-bold hover:bg-gray-800"
                 >
-                  <Badge badgeContent={pendingRequests.length} color="success">
-                    <MailIcon className="text-white" />
-                  </Badge>
+                  <Tooltip title="Friend Requests" arrow>
+                    <Badge badgeContent={pendingRequests.length} color="success">
+                      <MailIcon className="text-white" />
+                    </Badge>
+                  </Tooltip>
                 </button>
                 {isFriendRequestsOpen && (
                   <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg text-black z-50">
@@ -281,7 +283,9 @@ export default function Layout({ children }) {
                 onClick={handleLogout}
                 className="bg-black px-3 py-2 rounded-lg font-bold hover:bg-red-700 transition"
               >
-                <LogoutSharpIcon />
+                <Tooltip title="LogOut" arrow>
+                  <LogoutSharpIcon />
+                </Tooltip>
               </button>
             </>
           )}
