@@ -140,7 +140,7 @@ export default function Layout({ children }) {
 
   return (
     <div className="min-h-screen  flex flex-col">
-      <header className="bg-red-900 text-white px-6 py-3 flex items-center justify-between shadow-lg">
+      <header className="bg-redd text-white px-6 py-3 flex items-center justify-between shadow-lg">
         {/* Logo & Branding */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
