@@ -17,16 +17,21 @@ export async function GET(req) {
     // }
 
     // Fetch the logged-in user's friend data
-    const friendData = await Friend.findOne({ userId }).populate("friends.userId");
+    const friendData = await Friend.findOne({ userId });
 
     // Extract IDs of friends
-    const friendIds = friendData ? friendData.friends.map(friend => friend.userId._id.toString()) : [];
+    const friendIds = friendData
+      ? friendData.friends.map((friend) => friend.userId.toString())
+      : [];
+
+    console.log("friendIds:", friendIds);
 
     // Fetch all users who are NOT friends and NOT the logged-in user
     const users = await User.find({
       _id: { $nin: [userId, ...friendIds] }, // Exclude the logged-in user and their friends
     }).select("-password"); // Exclude password field from the results
 
+    console.log("users:", users);
     // Send the response with the filtered users
     return new Response(
       JSON.stringify({
@@ -36,9 +41,6 @@ export async function GET(req) {
     );
   } catch (error) {
     console.error("Error fetching users:", error);
-    return new Response(
-      JSON.stringify({ error: "Error fetching users" }),
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({ error: "Error fetching users" }), { status: 500 });
   }
 }
