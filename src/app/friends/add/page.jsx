@@ -5,8 +5,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast"; // Import toast library
 
 export default function AddFriends() {
-  const userId =
-    typeof window !== "undefined" ? localStorage.getItem("userId") : null;
+  const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
   const [users, setUsers] = useState([]);
   const [friends, setFriends] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
@@ -42,8 +41,8 @@ export default function AddFriends() {
       }
     };
 
-    Promise.all([fetchUsers(), fetchFriends(), fetchPendingRequests()]).then(
-      () => setLoading(false)
+    Promise.all([fetchUsers(), fetchFriends(), fetchPendingRequests()]).then(() =>
+      setLoading(false)
     );
   }, [userId]);
 
@@ -66,7 +65,7 @@ export default function AddFriends() {
 
       // Add the friend request to the pendingRequests state
       setPendingRequests((prevRequests) => [
-        {...prevRequests?.length > 0 ? prevRequests : []},
+        { ...(prevRequests?.length > 0 ? prevRequests : []) },
         { senderId: userId, receiverId: friendId },
       ]);
     } catch (error) {
@@ -85,7 +84,7 @@ export default function AddFriends() {
   const isFriend = (friendId) => friends.some((friend) => friend === friendId);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-200 flex flex-col items-center p-6">
+    <div className="min-h-screen bg-reddd flex flex-col items-center p-6">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">👥 Add Friends</h1>
 
       {/* Loading State */}
@@ -95,9 +94,7 @@ export default function AddFriends() {
         </div>
       ) : users.length === 0 ? (
         // No Friends to Add Message
-        <p className="text-gray-600 text-lg mt-6">
-          🎉 You've added all available friends!
-        </p>
+        <p className="text-gray-600 text-lg mt-6">🎉 You've added all available friends!</p>
       ) : (
         <div className="w-full max-w-3xl space-y-4">
           {users
@@ -108,9 +105,7 @@ export default function AddFriends() {
                 className="flex items-center justify-between bg-white shadow-md p-4 rounded-xl hover:shadow-lg transition"
               >
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-700">
-                    {user.username}
-                  </h3>
+                  <h3 className="text-xl font-semibold text-gray-700">{user.username}</h3>
                   <p className="text-gray-500">{user.email}</p>
                 </div>
 
@@ -131,7 +126,7 @@ export default function AddFriends() {
                 ) : (
                   <button
                     onClick={() => handleSendFriendRequest(user._id)}
-                    className="px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
+                    className="px-4 py-2 rounded-lg bg-redd text-white font-semibold hover:bg-blue-600 transition"
                   >
                     ➕ Add Friend
                   </button>

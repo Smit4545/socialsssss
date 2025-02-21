@@ -302,22 +302,24 @@ export default function Layout({ children }) {
         </div>
       </header>
       {isMenuOpen && (
-        <nav className="lg:hidden bg-red-800 text-white p-4 space-y-2">
+        <nav className="lg:hidden bg-redd  text-white p-4 space-y-2">
           <Link href="/">
-            <p className="block p-3 hover:bg-gray-700 font-bold rounded-lg cursor-pointer">Home</p>
+            <p className="block p-3 hover:bg-gray-700 text-lg font-extrabold rounded-lg cursor-pointer">
+              Home
+            </p>
           </Link>
           <Link href="/friends">
-            <p className="block p-3 hover:bg-gray-700 font-bold rounded-lg cursor-pointer">
+            <p className="block p-3 hover:bg-gray-700 text-lg font-extrabold rounded-lg cursor-pointer">
               Friends
             </p>
           </Link>
           <Link href="/profile">
-            <p className="block p-3 hover:bg-gray-700 rounded-lg font-bold cursor-pointer">
+            <p className="block p-3 hover:bg-gray-700 text-lg rounded-lg font-extrabold cursor-pointer">
               Profile
             </p>
           </Link>
           <Link href="/location">
-            <p className="block p-3 hover:bg-gray-700 rounded-lg font-bold cursor-pointer">
+            <p className="block p-3 hover:bg-gray-700  text-lgrounded-lg font-extrabold cursor-pointer">
               Track Location
             </p>
           </Link>
