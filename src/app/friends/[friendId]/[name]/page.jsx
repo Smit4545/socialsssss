@@ -179,6 +179,18 @@ export default function Chat() {
   useEffect(() => {
     if (!userId || !friendId || !socket) return;
 
+    const fetchChatHistory = async () => {
+      try {
+        const res = await fetch(`/api/chat/userId=${userId}&friendId=${friendId}`);
+        const data = await res.json();
+        setMessages(data.messages);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
+
+    fetchChatHistory();
+
     const roomId = [userId, friendId].sort().join("-");
     console.log(`Joining room: ${roomId}`);
 
@@ -203,6 +215,10 @@ export default function Chat() {
       endCall();
     });
 
+    // if (newMessage.senderId !== userId && friendId !== newMessage.senderId) {
+    //   new Notification(`New message from ${newMessage.senderName}`, { body: newMessage.message });
+    // }
+
     return () => {
       socket.off("receive-message");
       socket.off("incoming-call");
@@ -217,7 +233,7 @@ export default function Chat() {
     }
   }, [socket, userId]);
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
@@ -228,9 +244,23 @@ export default function Chat() {
       createdAt: new Date(),
     };
 
-    socket.emit("send-message", messageData);
-    setMessages((prevMessages) => [...prevMessages, messageData]);
-    setNewMessage("");
+    try {
+      // Save message to the database
+      const res = await fetch(`/api/chat/${userId}/${friendId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: newMessage }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        socket.emit("send-message", messageData); // Emit to Socket.IO
+        setMessages((prevMessages) => [...prevMessages, messageData]);
+        setNewMessage("");
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
   };
 
   // 📞 Initiate a video call

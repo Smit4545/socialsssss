@@ -23,8 +23,8 @@ const LogIn = () => {
       const data = await response.json();
 
       if (response.ok) {
-        document.cookie = `token=${data.token}; path=/; max-age=3600`;
-        document.cookie = `userId=${data.id}; path=/; max-age=3600`;
+        document.cookie = `token=${data.token}; path=/; max-age=86400`;
+        document.cookie = `userId=${data.id}; path=/; max-age=864600`;
         localStorage.setItem("userId", data.id);
         localStorage.setItem("username", data.name);
         window.location.href = "/";
