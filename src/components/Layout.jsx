@@ -15,6 +15,9 @@ import CheckIcon from "@mui/icons-material/Check";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
+// import { toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-hot-toast";
 
 export default function Layout({ children }) {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -107,18 +110,32 @@ export default function Layout({ children }) {
   const handleCreatePost = async (e) => {
     e.preventDefault();
 
+    if (!userId) {
+      toast.error("User not found. Please log in again.");
+      return;
+    }
+
+    if (!newPostContent.trim()) {
+      toast.error("Post content cannot be empty!");
+      return;
+    }
+
     try {
-      await axios.post("/api/posts", {
+      const response = await axios.post("/api/posts", {
         userId,
-        content: newPostContent,
+        content: newPostContent.trim(),
       });
-      setNewPostContent("");
-      fetchPosts();
-      setIsModalOpen(false);
-      toast.success("Post created successfully!"); // Success toast
+
+      setNewPostContent(""); // Clear input field
+      setIsModalOpen(false); // Close modal
+
+      toast.success("Post created successfully!"); // Show success toast
+
+      // Optionally, refresh posts if you have a `fetchPosts` function
+      // fetchPosts();
     } catch (error) {
       console.error("Error creating post:", error);
-      toast.error("Error creating post"); // Error toast
+      toast.error("Error creating post. Please try again.");
     }
   };
 
@@ -199,11 +216,12 @@ export default function Layout({ children }) {
               </button>
 
               {/* Modal for Creating Post */}
+              {/* Modal for Creating Post */}
               {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                   <div
                     ref={modalRef}
-                    className="bg-white p-6 rounded-2xl shadow-2xl max-w-lg w-full transition-all relative z-50"
+                    className="bg-white p-6 rounded-2xl shadow-2xl max-w-lg w-full relative z-50"
                   >
                     <h2 className="text-xl font-bold mb-4">Create a New Post</h2>
                     <form onSubmit={handleCreatePost}>
@@ -213,6 +231,7 @@ export default function Layout({ children }) {
                         placeholder="What's on your mind?"
                         rows="4"
                         className="w-full border border-gray-300 rounded-xl p-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        autoFocus
                       />
                       <div className="flex justify-end gap-4 mt-4">
                         <button
@@ -224,9 +243,9 @@ export default function Layout({ children }) {
                         </button>
                         <button
                           type="submit"
-                          disabled={!newPostContent}
+                          disabled={!newPostContent.trim()}
                           className={`px-6 py-2 rounded-lg text-white transition ${
-                            newPostContent
+                            newPostContent.trim()
                               ? "bg-gray-900 hover:bg-blue-600"
                               : "bg-gray-400 cursor-not-allowed"
                           }`}
