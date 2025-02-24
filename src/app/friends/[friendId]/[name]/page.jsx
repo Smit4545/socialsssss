@@ -181,9 +181,11 @@ export default function Chat() {
 
     const fetchChatHistory = async () => {
       try {
-        const res = await fetch(`/api/chat/userId=${userId}&friendId=${friendId}`);
+        const res = await fetch(`/api/chat/userId=${userId}/friendId=${friendId}`);
         const data = await res.json();
+        console.log(data);
         setMessages(data.messages);
+        console.log("Fetched chat history:", data.messages);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }

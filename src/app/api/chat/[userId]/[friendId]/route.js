@@ -4,7 +4,8 @@ import Chat from "../../../../../models/ChatModel";
 export async function GET(req, { params }) {
   await dbConnect(); // Connect to the database
 
-  const { userId, friendId } = params; // Extract userId and friendId properly
+  const { userId, friendId } = await params; // Extract userId and friendId properly
+  console.log(userId, friendId);
 
   if (!userId || !friendId) {
     return new Response(JSON.stringify({ success: false, error: "User IDs are required" }), {
@@ -21,6 +22,8 @@ export async function GET(req, { params }) {
       ],
     }).sort({ createdAt: 1 }); // Sort messages from oldest to newest
 
+    console.log("chats", chats);
+
     return new Response(JSON.stringify({ success: true, messages: chats }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
@@ -36,8 +39,9 @@ export async function GET(req, { params }) {
 export async function POST(req, { params }) {
   await dbConnect(); // Connect to the database
 
-  const { userId, friendId } = params; // Extract userId and friendId properly
+  const { userId, friendId } = await params; // Extract userId and friendId properly
   const { message } = await req.json(); // Parse JSON body
+  console.log(userId, friendId, message);
 
   if (!userId || !friendId) {
     return new Response(JSON.stringify({ success: false, error: "User IDs are required" }), {
@@ -54,10 +58,10 @@ export async function POST(req, { params }) {
   try {
     // Save the new chat message
     const newChat = new Chat({
+      // userId: userId,
       senderId: userId,
       receiverId: friendId,
       message,
-      createdAt: new Date(), // Ensure createdAt is set
     });
 
     await newChat.save();
