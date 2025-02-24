@@ -4,7 +4,13 @@ import Chat from "../../../../../models/ChatModel";
 export async function GET(req, { params }) {
   await dbConnect(); // Connect to the database
 
-  const { userId, friendId } = params; // Fix destructuring
+  const { userId, friendId } = params; // Extract userId and friendId properly
+
+  if (!userId || !friendId) {
+    return new Response(JSON.stringify({ success: false, error: "User IDs are required" }), {
+      status: 400,
+    });
+  }
 
   try {
     // Fetch chat messages between the two users
@@ -17,8 +23,10 @@ export async function GET(req, { params }) {
 
     return new Response(JSON.stringify({ success: true, messages: chats }), {
       status: 200,
+      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
+    console.error("Error fetching chat:", error);
     return new Response(JSON.stringify({ success: false, error: "Error fetching chats" }), {
       status: 500,
     });
@@ -28,10 +36,16 @@ export async function GET(req, { params }) {
 export async function POST(req, { params }) {
   await dbConnect(); // Connect to the database
 
-  const { userId, friendId } = params; // Fix destructuring
+  const { userId, friendId } = params; // Extract userId and friendId properly
   const { message } = await req.json(); // Parse JSON body
 
-  if (!message) {
+  if (!userId || !friendId) {
+    return new Response(JSON.stringify({ success: false, error: "User IDs are required" }), {
+      status: 400,
+    });
+  }
+
+  if (!message || message.trim() === "") {
     return new Response(JSON.stringify({ success: false, error: "Message is required" }), {
       status: 400,
     });
@@ -50,8 +64,10 @@ export async function POST(req, { params }) {
 
     return new Response(JSON.stringify({ success: true, chat: newChat }), {
       status: 201,
+      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
+    console.error("Error saving chat:", error);
     return new Response(JSON.stringify({ success: false, error: "Error saving chat" }), {
       status: 500,
     });
