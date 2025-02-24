@@ -17,8 +17,8 @@ export async function GET(req, { params }) {
     // Fetch chat messages between the two users
     const chats = await Chat.find({
       $or: [
-        { senderId: userId, receiverId: friendId },
-        { senderId: friendId, receiverId: userId },
+        { senderId: String(userId), receiverId: String(friendId) },
+        { senderId: String(friendId), receiverId: String(userId) },
       ],
     }).sort({ createdAt: 1 }); // Sort messages from oldest to newest
 
