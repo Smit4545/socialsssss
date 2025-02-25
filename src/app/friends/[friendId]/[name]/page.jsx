@@ -177,6 +177,30 @@ export default function Chat() {
   }, [messages]);
 
   useEffect(() => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  const showNotification = (message) => {
+    if (Notification.permission === "granted") {
+      new Notification(`New message from ${message.senderName}`, {
+        body: message.message,
+        icon: "/logo2.webp", // Change to your app logo/icon
+      });
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          new Notification(`New message from ${message.senderName}`, {
+            body: message.message,
+            icon: "/notification-icon.png",
+          });
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
     if (!userId || !friendId || !socket) return;
 
     const fetchChatHistory = async () => {
@@ -200,6 +224,10 @@ export default function Chat() {
 
     socket.on("receive-message", (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
+
+      if (message.senderId !== friendId) {
+        showNotification(message);
+      }
     });
 
     socket.on("incoming-call", ({ signal, from }) => {
