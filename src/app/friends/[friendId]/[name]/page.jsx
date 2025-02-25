@@ -183,20 +183,15 @@ export default function Chat() {
   }, []);
 
   const showNotification = (message) => {
+    console.log("🔔 Attempting to show notification for:", message);
+    alert(`New message from ${message.senderName}: ${message.message}`);
     if (Notification.permission === "granted") {
       new Notification(`New message from ${message.senderName}`, {
         body: message.message,
-        icon: "/logo2.webp", // Change to your app logo/icon
+        icon: "/logo2.webp", // Update with an actual image URL
       });
-    } else if (Notification.permission !== "denied") {
-      Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          new Notification(`New message from ${message.senderName}`, {
-            body: message.message,
-            icon: "/notification-icon.png",
-          });
-        }
-      });
+    } else {
+      console.warn("❌ Notification permission not granted.");
     }
   };
 
