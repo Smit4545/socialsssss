@@ -162,6 +162,7 @@ app.prepare().then(() => {
 
       const room = [message.senderId, message.receiverId].sort().join("-");
       socket.to(room).emit("receive-message", message);
+      // io.to(receiverId).emit("new-notification", { senderId:message.senderId, message });
       console.log(`📩 Message sent to ${room}:`, message);
     });
 
@@ -177,6 +178,7 @@ app.prepare().then(() => {
         username: data.username,
         lat: data.lat,
         lng: data.lng,
+        speed: data.speed,
       };
 
       io.emit("location-updated", userLocations);
