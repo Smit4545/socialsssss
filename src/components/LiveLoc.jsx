@@ -1,11 +1,150 @@
+// "use client"; // ✅ Ensure client-side execution
+
+// import { useState, useEffect } from "react";
+// import dynamic from "next/dynamic"; // ✅ Dynamically import react-leaflet
+// import { useSocket } from "../lib/socket";
+// import L from "leaflet";
+
+// // ✅ Dynamically import react-leaflet components (Prevents SSR issues)
+// const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), {
+//   ssr: false,
+// });
+// const TileLayer = dynamic(() => import("react-leaflet").then((mod) => mod.TileLayer), {
+//   ssr: false,
+// });
+// const Marker = dynamic(() => import("react-leaflet").then((mod) => mod.Marker), { ssr: false });
+// const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), { ssr: false });
+
+// export default function LiveLocation() {
+//   const { socket } = useSocket();
+//   const [userLocation, setUserLocation] = useState(null);
+//   const [allUsers, setAllUsers] = useState({});
+//   const [error, setError] = useState("");
+//   const [userId, setUserId] = useState(null);
+//   const [username, setUsername] = useState("You");
+//   const [isClient, setIsClient] = useState(false); // ✅ Ensures safe client-side rendering
+
+//   useEffect(() => {
+//     setIsClient(true); // ✅ Ensures `window`-dependent code runs only on client
+//     if (typeof window !== "undefined") {
+//       setUserId(localStorage.getItem("userId") || null);
+//       setUsername(localStorage.getItem("username") || "You");
+//     }
+//   }, []);
+
+//   const defaultIcon = new L.Icon({
+//     iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+//     iconSize: [25, 41],
+//     iconAnchor: [12, 41],
+//     popupAnchor: [1, -34],
+//   });
+
+//   const userIcon = new L.Icon({
+//     iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+//     iconSize: [30, 48],
+//     iconAnchor: [15, 48],
+//     popupAnchor: [1, -40],
+//   });
+
+//   useEffect(() => {
+//     if (!isClient || !userId || typeof window === "undefined") return;
+
+//     if ("geolocation" in navigator) {
+//       const updateLocation = (position) => {
+//         const { latitude, longitude } = position.coords;
+//         setUserLocation({ lat: latitude, lng: longitude });
+
+//         socket.emit("update-location", {
+//           userId,
+//           username,
+//           lat: latitude,
+//           lng: longitude,
+//         });
+//       };
+
+//       const errorHandler = (error) => {
+//         console.error("Geolocation Error:", error);
+//         setError("Failed to retrieve location.");
+//       };
+
+//       const watchId = navigator.geolocation.watchPosition(updateLocation, errorHandler, {
+//         enableHighAccuracy: true,
+//         maximumAge: 10000,
+//       });
+
+//       return () => navigator.geolocation.clearWatch(watchId);
+//     }
+//   }, [socket, userId, username, isClient]);
+
+//   useEffect(() => {
+//     if (!socket) return;
+
+//     socket.on("location-updated", (users) => {
+//       setAllUsers(users);
+//     });
+
+//     return () => {
+//       socket.off("location-updated");
+//     };
+//   }, [socket]);
+
+//   // ✅ Prevent rendering on the server-side
+//   if (!isClient) {
+//     return <p className="text-center text-gray-600">Loading map...</p>;
+//   }
+
+//   return (
+//     <div className="h-screen w-full">
+//       <h1 className="text-2xl font-bold text-center p-4 bg-gray-800 text-white">
+//         Live Location Tracker
+//       </h1>
+
+//       {error && (
+//         <div className="bg-red-500 text-white text-center py-2">
+//           <p>{error}</p>
+//         </div>
+//       )}
+
+//       {userLocation ? (
+//         <MapContainer
+//           center={[userLocation.lat, userLocation.lng]}
+//           zoom={5}
+//           className="h-full w-full"
+//           style={{ height: "calc(100vh - 64px)" }}
+//         >
+//           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+//           <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
+//             <Popup>
+//               <strong>{username} (You)</strong>
+//             </Popup>
+//           </Marker>
+
+//           {Object.values(allUsers).map(
+//             (user) =>
+//               user.userId !== userId && (
+//                 <Marker key={user.userId} position={[user.lat, user.lng]} icon={defaultIcon}>
+//                   <Popup>
+//                     <strong>{user.username}</strong>
+//                   </Popup>
+//                 </Marker>
+//               )
+//           )}
+//         </MapContainer>
+//       ) : (
+//         <p className="text-center text-gray-500 py-4">Fetching location...</p>
+//       )}
+//     </div>
+//   );
+// }
 "use client"; // ✅ Ensure client-side execution
 
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic"; // ✅ Dynamically import react-leaflet
+import dynamic from "next/dynamic";
 import { useSocket } from "../lib/socket";
 import L from "leaflet";
 
-// ✅ Dynamically import react-leaflet components (Prevents SSR issues)
+// ✅ Dynamically import react-leaflet components
 const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), {
   ssr: false,
 });
@@ -22,10 +161,13 @@ export default function LiveLocation() {
   const [error, setError] = useState("");
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState("You");
-  const [isClient, setIsClient] = useState(false); // ✅ Ensures safe client-side rendering
+  const [speed, setSpeed] = useState(0); // ✅ Store user's speed
+  const [prevLocation, setPrevLocation] = useState(null);
+  const [prevTimestamp, setPrevTimestamp] = useState(null);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true); // ✅ Ensures `window`-dependent code runs only on client
+    setIsClient(true);
     if (typeof window !== "undefined") {
       setUserId(localStorage.getItem("userId") || null);
       setUsername(localStorage.getItem("username") || "You");
@@ -52,13 +194,26 @@ export default function LiveLocation() {
     if ("geolocation" in navigator) {
       const updateLocation = (position) => {
         const { latitude, longitude } = position.coords;
+        const timestamp = position.timestamp;
+
+        // Calculate speed
+        if (prevLocation && prevTimestamp) {
+          const distance = getDistance(prevLocation.lat, prevLocation.lng, latitude, longitude); // in meters
+          const timeElapsed = (timestamp - prevTimestamp) / 1000; // Convert ms to seconds
+          const speedKmh = (distance / timeElapsed) * 3.6; // Convert m/s to km/h
+          setSpeed(speedKmh.toFixed(2)); // Store speed with 2 decimal places
+        }
+
         setUserLocation({ lat: latitude, lng: longitude });
+        setPrevLocation({ lat: latitude, lng: longitude });
+        setPrevTimestamp(timestamp);
 
         socket.emit("update-location", {
           userId,
           username,
           lat: latitude,
           lng: longitude,
+          speed: speed,
         });
       };
 
@@ -69,12 +224,12 @@ export default function LiveLocation() {
 
       const watchId = navigator.geolocation.watchPosition(updateLocation, errorHandler, {
         enableHighAccuracy: true,
-        maximumAge: 10000,
+        maximumAge: 5000,
       });
 
       return () => navigator.geolocation.clearWatch(watchId);
     }
-  }, [socket, userId, username, isClient]);
+  }, [socket, userId, username, isClient, prevLocation, prevTimestamp]);
 
   useEffect(() => {
     if (!socket) return;
@@ -88,7 +243,22 @@ export default function LiveLocation() {
     };
   }, [socket]);
 
-  // ✅ Prevent rendering on the server-side
+  // ✅ Function to Calculate Distance Between Two Coordinates
+  const getDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371e3; // Earth radius in meters
+    const φ1 = (lat1 * Math.PI) / 180;
+    const φ2 = (lat2 * Math.PI) / 180;
+    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+    const a =
+      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c; // Distance in meters
+  };
+
   if (!isClient) {
     return <p className="text-center text-gray-600">Loading map...</p>;
   }
@@ -105,18 +275,24 @@ export default function LiveLocation() {
         </div>
       )}
 
+      <div className="text-center p-2 text-lg font-semibold text-gray-700">
+        📏 Speed: {speed} km/h
+      </div>
+
       {userLocation ? (
         <MapContainer
           center={[userLocation.lat, userLocation.lng]}
           zoom={5}
           className="h-full w-full"
-          style={{ height: "calc(100vh - 64px)" }}
+          style={{ height: "calc(100vh - 96px)" }}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
           <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
             <Popup>
               <strong>{username} (You)</strong>
+              <br />
+              🚗 Speed: {speed} km/h
             </Popup>
           </Marker>
 
@@ -126,6 +302,8 @@ export default function LiveLocation() {
                 <Marker key={user.userId} position={[user.lat, user.lng]} icon={defaultIcon}>
                   <Popup>
                     <strong>{user.username}</strong>
+                    <br />
+                    🚗 Speed: {user.speed} km/h
                   </Popup>
                 </Marker>
               )
