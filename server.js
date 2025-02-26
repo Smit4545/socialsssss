@@ -178,7 +178,7 @@ app.prepare().then(() => {
         username: data.username,
         lat: data.lat,
         lng: data.lng,
-        speed: data.speed,
+        //  speed: data.speed,
       };
 
       io.emit("location-updated", userLocations);
