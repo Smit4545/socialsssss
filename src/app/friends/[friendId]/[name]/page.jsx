@@ -412,7 +412,12 @@ export default function Chat() {
               </p>
               <p>{msg.message}</p>
               <span className="text-xs text-black mt-2 block">
-                {moment(msg.createdAt).format("h:mm A")}
+                {moment(msg.createdAt).calendar(null, {
+                  sameDay: "[Today] h:mm A",
+                  lastDay: "[Yesterday] h:mm A",
+                  lastWeek: "dddd h:mm A",
+                  sameElse: "DD/MM/YYYY h:mm A",
+                })}
               </span>
             </div>
           </div>
