@@ -96,29 +96,43 @@ export default function Home() {
   //   return () => document.removeEventListener("mousedown", handleClickOutside);
   // }, [isModalOpen]);
   const handleLike = async (postId) => {
+    if (!userId) {
+      toast.error("You need to log in to like a post.");
+      return;
+    }
+
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post._id === postId
+          ? {
+              ...post,
+              likes: post.likes.includes(userId)
+                ? post.likes.filter((id) => id !== userId) // Unlike
+                : [...post.likes, userId], // Like
+            }
+          : post
+      )
+    );
+
     try {
-      // Optimistically update the UI
+      await axios.post(`/api/posts/${postId}`, { userId });
+    } catch (error) {
+      console.error("Error liking the post:", error);
+      toast.error("Failed to update like. Please try again.");
+
+      // Rollback UI update if request fails
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
           post._id === postId
             ? {
                 ...post,
                 likes: post.likes.includes(userId)
-                  ? post.likes.filter((id) => id !== userId)
-                  : [...post.likes, userId],
+                  ? [...post.likes, userId] // Restore like if rollback needed
+                  : post.likes.filter((id) => id !== userId), // Restore unlike if rollback needed
               }
             : post
         )
       );
-
-      // Send request to backend
-      await axios.post(`/api/posts/${postId}`, { userId });
-
-      // Optionally, refetch the posts to ensure consistency
-      fetchPosts();
-    } catch (error) {
-      console.error("Error liking the post:", error);
-      toast.error("Error liking the post"); // Show error if request fails
     }
   };
 
