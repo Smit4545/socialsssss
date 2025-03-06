@@ -46,21 +46,21 @@ export default function Home() {
     fetchPosts();
   }, [userId, hasToken, isReady]);
 
-  const handleLike = async (postId) => {
-    try {
-      const response = await axios.post(`/api/posts/${postId}`, {
-        userId,
-      });
-      fetchPosts();
-      setPosts((prevPosts) =>
-        prevPosts.map((post) =>
-          post._id === postId ? { ...post, likes: [...post.likes, response.data.userId] } : post
-        )
-      );
-    } catch (error) {
-      console.error("Error liking the post:", error);
-    }
-  };
+  // const handleLike = async (postId) => {
+  //   try {
+  //     const response = await axios.post(`/api/posts/${postId}`, {
+  //       userId,
+  //     });
+  //     fetchPosts();
+  //     setPosts((prevPosts) =>
+  //       prevPosts.map((post) =>
+  //         post._id === postId ? { ...post, likes: [...post.likes, response.data.userId] } : post
+  //       )
+  //     );
+  //   } catch (error) {
+  //     console.error("Error liking the post:", error);
+  //   }
+  // };
 
   // const handleCreatePost = async (e) => {
   //   e.preventDefault();
@@ -95,6 +95,32 @@ export default function Home() {
 
   //   return () => document.removeEventListener("mousedown", handleClickOutside);
   // }, [isModalOpen]);
+  const handleLike = async (postId) => {
+    try {
+      // Optimistically update the UI
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post._id === postId
+            ? {
+                ...post,
+                likes: post.likes.includes(userId)
+                  ? post.likes.filter((id) => id !== userId)
+                  : [...post.likes, userId],
+              }
+            : post
+        )
+      );
+
+      // Send request to backend
+      await axios.post(`/api/posts/${postId}`, { userId });
+
+      // Optionally, refetch the posts to ensure consistency
+      fetchPosts();
+    } catch (error) {
+      console.error("Error liking the post:", error);
+      toast.error("Error liking the post"); // Show error if request fails
+    }
+  };
 
   return (
     <Layout>
