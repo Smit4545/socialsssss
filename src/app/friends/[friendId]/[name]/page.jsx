@@ -376,19 +376,12 @@ export default function Chat() {
               <VideoCallIcon />
             </button>
           ) : (
-            (<button
+            <button
               onClick={endCall}
               className="bg-red-500 px-4 py-2 rounded-lg text-white font-bold shadow-md hover:bg-red-600 transition-all duration-300"
             >
               <CallEndIcon />
-            </button>)(
-              <button
-                onClick={toggleScreenSharing}
-                className="bg-blue-500 px-4 py-2 rounded-lg text-white font-bold shadow-md hover:bg-blue-600 transition-all duration-300"
-              >
-                {isScreenSharing ? "Stop Sharing" : "Share Screen"}
-              </button>
-            )
+            </button>
           )}
 
           <button
