@@ -171,6 +171,9 @@ export default function Chat() {
   const [showVideo, setShowVideo] = useState(false);
   const [isCallConnected, setIsCallConnected] = useState(false);
 
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
+  const [screenStream, setScreenStream] = useState(null);
+
   // Auto-scroll to the latest message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -325,6 +328,75 @@ export default function Chat() {
     });
   };
 
+  // 📽️ Toggle screen sharing
+  const toggleScreenSharing = async () => {
+    if (!isScreenSharing) {
+      try {
+        // Get screen stream
+        const screenStream = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+          audio: true, // Optional: Include audio from the screen
+        });
+
+        // Replace the video stream in the peer connection
+        const peer = peerRef.current;
+        const videoTrack = screenStream.getVideoTracks()[0];
+
+        // Replace the video track in the sender
+        const senders = peer._pc.getSenders();
+        const videoSender = senders.find((sender) => sender.track.kind === "video");
+        if (videoSender) {
+          videoSender.replaceTrack(videoTrack);
+        }
+
+        // Update state
+        setScreenStream(screenStream);
+        setIsScreenSharing(true);
+
+        // Handle when the user stops screen sharing
+        videoTrack.onended = () => {
+          toggleScreenSharing();
+        };
+      } catch (error) {
+        console.error("Error sharing screen:", error);
+      }
+    } else {
+      // Stop screen sharing
+      if (screenStream) {
+        screenStream.getTracks().forEach((track) => track.stop());
+      }
+
+      // Revert to the original video stream
+      const peer = peerRef.current;
+      const senders = peer._pc.getSenders();
+      const videoSender = senders.find((sender) => sender.track.kind === "video");
+      if (videoSender && myVideoRef.current.srcObject) {
+        const originalVideoTrack = myVideoRef.current.srcObject.getVideoTracks()[0];
+        videoSender.replaceTrack(originalVideoTrack);
+      }
+
+      // Update state
+      setScreenStream(null);
+      setIsScreenSharing(false);
+    }
+  };
+
+  // 🔇 Mute audio
+  const muteAudio = () => {
+    if (myVideoRef.current.srcObject) {
+      const audioTracks = myVideoRef.current.srcObject.getAudioTracks();
+      audioTracks.forEach((track) => (track.enabled = !track.enabled));
+    }
+  };
+
+  // 🔈 Unmute audio
+  const unmuteAudio = () => {
+    if (myVideoRef.current.srcObject) {
+      const audioTracks = myVideoRef.current.srcObject.getAudioTracks();
+      audioTracks.forEach((track) => (track.enabled = true));
+    }
+  };
+
   // ❌ Reject a call
   const rejectCall = () => {
     setIncomingCall(null);
@@ -341,6 +413,10 @@ export default function Chat() {
       friendVideoRef.current.srcObject = null; // Clear friend's video
     }
 
+    if (screenStream) {
+      screenStream.getTracks().forEach((track) => track.stop());
+    }
+
     if (myVideoRef.current) {
       myVideoRef.current.srcObject = null; // Clear your own video if needed
     }
@@ -354,6 +430,8 @@ export default function Chat() {
     setIncomingCall(null);
     setCallAccepted(false);
     setIsCallConnected(false);
+    setIsScreenSharing(false);
+    setScreenStream(null);
   };
 
   return (
@@ -376,12 +454,19 @@ export default function Chat() {
               <VideoCallIcon />
             </button>
           ) : (
-            <button
+            (<button
               onClick={endCall}
               className="bg-red-500 px-4 py-2 rounded-lg text-white font-bold shadow-md hover:bg-red-600 transition-all duration-300"
             >
               <CallEndIcon />
-            </button>
+            </button>)(
+              <button
+                onClick={toggleScreenSharing}
+                className="bg-blue-500 px-4 py-2 rounded-lg text-white font-bold shadow-md hover:bg-blue-600 transition-all duration-300"
+              >
+                {isScreenSharing ? "Stop Sharing" : "Share Screen"}
+              </button>
+            )
           )}
 
           <button
