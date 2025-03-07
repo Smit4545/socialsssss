@@ -466,6 +466,20 @@ export default function Chat() {
               >
                 {isScreenSharing ? "Stop Sharing" : "Share Screen"}
               </button>
+            )(
+              <button
+                onClick={muteAudio}
+                className="bg-gray-500 px-4 py-2 rounded-lg text-white font-bold shadow-md hover:bg-gray-600 transition-all duration-300"
+              >
+                <MicOffIcon />
+              </button>
+            )(
+              <button
+                onClick={unmuteAudio}
+                className="bg-gray-500 px-4 py-2 rounded-lg text-white font-bold shadow-md hover:bg-gray-600 transition-all duration-300"
+              >
+                <MicIcon />
+              </button>
             )
           )}
 
