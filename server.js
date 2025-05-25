@@ -133,21 +133,21 @@ app.prepare().then(() => {
   const activeCalls = {}; // Track active calls (caller -> receiver)
 
   io.on("connection", (socket) => {
-    console.log("✅ New Socket Connected:", socket.id);
+    console.log("New Socket Connected:", socket.id);
 
     // Register user when they connect
     socket.on("register-user", (userId) => {
-      if (!userId) return console.error("❌ Invalid userId on register");
+      if (!userId) return console.error("Invalid userId on register");
 
       users[userId] = socket.id; // Store user socket mapping
       io.emit("active-users", Object.keys(users)); // Send active users list
-      console.log(`🟢 User Registered: ${userId} (Socket: ${socket.id})`);
+      console.log(`User Registered: ${userId} (Socket: ${socket.id})`);
     });
 
     // Join chat room
     socket.on("join-room", ({ userId, friendId }) => {
       if (!userId || !friendId)
-        return console.error("❌ Invalid join-room data:", { userId, friendId });
+        return console.error("Invalid join-room data:", { userId, friendId });
 
       const room = [userId, friendId].sort().join("-");
       socket.join(room);
@@ -157,13 +157,13 @@ app.prepare().then(() => {
     // Send & Receive Messages
     socket.on("send-message", (message) => {
       if (!message.senderId || !message.receiverId || typeof message.message !== "string") {
-        return console.error("❌ Invalid message data:", message);
+        return console.error("Invalid message data:", message);
       }
 
       const room = [message.senderId, message.receiverId].sort().join("-");
       socket.to(room).emit("receive-message", message);
       // io.to(receiverId).emit("new-notification", { senderId:message.senderId, message });
-      console.log(`📩 Message sent to ${room}:`, message);
+      console.log(`Message sent to ${room}:`, message);
     });
 
     // Location Tracking
@@ -188,44 +188,44 @@ app.prepare().then(() => {
     // Video Call: Initiate Call
     socket.on("call-user", ({ userToCall, signal, from }) => {
       if (!users[userToCall]) {
-        console.error("❌ User Not Found:", userToCall);
+        console.error("User Not Found:", userToCall);
         io.to(users[from]).emit("call-error", { message: "User is offline or not registered" });
         return;
       }
 
       activeCalls[from] = userToCall; // Store active call
       io.to(users[userToCall]).emit("incoming-call", { signal, from });
-      console.log(`📞 Call request sent from ${from} to ${userToCall}`);
+      console.log(`Call request sent from ${from} to ${userToCall}`);
     });
 
     // Video Call: Accept Call
     socket.on("accept-call", ({ signal, from }) => {
-      if (!users[from]) return console.error("❌ Caller Not Found:", from);
+      if (!users[from]) return console.error("Caller Not Found:", from);
 
       io.to(users[from]).emit("call-accepted", { signal, answerId: socket.id });
-      console.log(`✅ Call accepted by ${socket.id} for ${from}`);
+      console.log(`Call accepted by ${socket.id} for ${from}`);
     });
 
     // Video Call: End Call
     socket.on("end-call", ({ userToEnd }) => {
-      if (!users[userToEnd]) return console.error("❌ User Not Found:", userToEnd);
+      if (!users[userToEnd]) return console.error(" User Not Found:", userToEnd);
 
       io.to(users[userToEnd]).emit("call-ended");
       delete activeCalls[userToEnd];
-      console.log(`🔴 Call ended by ${socket.id} for ${userToEnd}`);
+      console.log(`Call ended by ${socket.id} for ${userToEnd}`);
     });
 
     // ICE Candidate Exchange (WebRTC)
     socket.on("send-ice-candidate", ({ userToCall, candidate }) => {
-      if (!users[userToCall]) return console.error("❌ User Not Found:", userToCall);
+      if (!users[userToCall]) return console.error("User Not Found:", userToCall);
 
       io.to(users[userToCall]).emit("receive-ice-candidate", candidate);
-      console.log(`❄️ ICE Candidate sent to ${userToCall}`);
+      console.log(`ICE Candidate sent to ${userToCall}`);
     });
 
     // Handle Disconnection
     socket.on("disconnect", () => {
-      console.log("🔴 Socket Disconnected:", socket.id);
+      console.log("Socket Disconnected:", socket.id);
 
       // Remove user from active list
       const disconnectedUser = Object.keys(users).find((userId) => users[userId] === socket.id);
@@ -240,11 +240,11 @@ app.prepare().then(() => {
 
   // Graceful Shutdown
   process.on("SIGTERM", () => {
-    console.log("⚠️ SIGTERM received. Shutting down...");
+    console.log("SIGTERM received. Shutting down...");
     httpServer.close(() => {
-      console.log("🚫 Server Closed.");
+      console.log("Server Closed.");
       io.close(() => {
-        console.log("🛑 Socket.IO Closed.");
+        console.log("Socket.IO Closed.");
         process.exit(0);
       });
     });
@@ -252,6 +252,6 @@ app.prepare().then(() => {
 
   // Start Server
   httpServer.listen(port, () => {
-    console.log(`🚀 Server Ready on http://${hostname}:${port}`);
+    console.log(`Server Ready on http://${hostname}:${port}`);
   });
 });
