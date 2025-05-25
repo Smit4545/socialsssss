@@ -344,7 +344,7 @@ export default function Layout({ children }) {
           </Link>
         </nav>
       )}
-      <main className="mt-0">{currentChildren}</main>
+      {currentChildren}
     </div>
   );
 }
