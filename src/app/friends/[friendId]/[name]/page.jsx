@@ -19,6 +19,8 @@ import {
   X,
   Download,
   FileIcon,
+  Monitor,
+  MonitorOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
