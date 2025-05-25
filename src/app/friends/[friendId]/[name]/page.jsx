@@ -600,6 +600,7 @@ export default function Chat() {
       )}
 
       {/* Video Call Section */}
+      {/* Video Call Section */}
       {showVideo && (
         <div className="fixed inset-0 bg-gradient-to-br from-slate-900 to-slate-800 z-40 animate-fade-in">
           <div className="h-full flex flex-col">
@@ -633,7 +634,7 @@ export default function Chat() {
               </div>
 
               {/* Your Video (Picture-in-Picture) */}
-              <div className="absolute top-8 right-8 w-48 h-36 bg-slate-600 rounded-xl overflow-hidden shadow-xl border-2 border-white/20">
+              <div className="absolute bottom-4 right-4 w-48 h-36 bg-slate-600 rounded-xl overflow-hidden shadow-xl border-2 border-white/20">
                 <video
                   ref={myVideoRef}
                   autoPlay
@@ -654,7 +655,7 @@ export default function Chat() {
 
               {/* Call Status */}
               {isCallConnected && (
-                <div className="absolute top-8 left-8">
+                <div className="absolute top-4 left-4">
                   <Badge className="bg-green-500/20 text-green-400 border-green-500/30 px-3 py-1">
                     <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
                     Connected
@@ -663,17 +664,16 @@ export default function Chat() {
               )}
             </div>
 
-            {/* Call Controls */}
-            <div className="p-6 bg-slate-900/50 backdrop-blur-md">
+            {/* Call Controls - Fixed at bottom center */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-slate-900/90 to-transparent">
               <div className="flex justify-center space-x-4">
                 <Button
                   onClick={toggleMute}
                   className={`p-4 rounded-full transition-all duration-300 hover:scale-110 ${
                     isMuted
-                      ? "bg-red-500/20 text-red-400 border-red-500/30"
-                      : "bg-slate-700/50 text-white border-slate-600/30"
+                      ? "bg-red-500/90 text-white"
+                      : "bg-white/20 text-white hover:bg-white/30"
                   }`}
-                  variant="outline"
                 >
                   {isMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
                 </Button>
@@ -682,17 +682,16 @@ export default function Chat() {
                   onClick={toggleVideo}
                   className={`p-4 rounded-full transition-all duration-300 hover:scale-110 ${
                     isVideoOff
-                      ? "bg-red-500/20 text-red-400 border-red-500/30"
-                      : "bg-slate-700/50 text-white border-slate-600/30"
+                      ? "bg-red-500/90 text-white"
+                      : "bg-white/20 text-white hover:bg-white/30"
                   }`}
-                  variant="outline"
                 >
                   {isVideoOff ? <VideoOff className="w-6 h-6" /> : <Video className="w-6 h-6" />}
                 </Button>
 
                 <Button
                   onClick={endCall}
-                  className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                  className="bg-red-500/90 hover:bg-red-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
                 >
                   <PhoneOff className="w-6 h-6" />
                 </Button>
