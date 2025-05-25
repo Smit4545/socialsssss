@@ -601,48 +601,54 @@ export default function Chat() {
 
       {/* Video Call Section */}
       {/* Video Call Section */}
+      {/* Video Call Section */}
       {showVideo && (
         <div className="fixed inset-0 bg-gradient-to-br from-slate-900 to-slate-800 z-40 animate-fade-in">
           <div className="h-full flex flex-col">
             {/* Video Container */}
             <div className="flex-1 relative p-4">
               {/* Friend's Video (Main) */}
-              <div className="w-full h-full bg-slate-700 rounded-2xl overflow-hidden shadow-2xl">
-                <video
-                  ref={friendVideoRef}
-                  autoPlay
-                  className="w-full h-full object-cover"
-                  style={{ display: isCallConnected ? "block" : "none" }}
-                />
-                {!isCallConnected && (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <div className="text-center">
-                      <Avatar className="w-32 h-32 mx-auto mb-6 ring-4 ring-white/20">
-                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-4xl font-bold">
-                          {name?.charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <h3 className="text-2xl font-semibold text-white mb-2">{name}</h3>
-                      {isCalling ? (
-                        <p className="text-slate-300">Connecting...</p>
-                      ) : (
-                        <p className="text-slate-300">Connected</p>
-                      )}
-                    </div>
+              <div className="w-full h-full bg-slate-700 rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
+                {isCallConnected ? (
+                  <video
+                    ref={friendVideoRef}
+                    autoPlay
+                    playsInline
+                    className="w-full h-full object-cover"
+                    onError={(e) => console.error("Friend video error:", e)}
+                  />
+                ) : (
+                  <div className="text-center">
+                    <Avatar className="w-32 h-32 mx-auto mb-6 ring-4 ring-white/20">
+                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-4xl font-bold">
+                        {name?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <h3 className="text-2xl font-semibold text-white mb-2">{name}</h3>
+                    {isCalling ? (
+                      <div className="flex flex-col items-center">
+                        <p className="text-slate-300 mb-2">Connecting...</p>
+                        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                      </div>
+                    ) : (
+                      <p className="text-slate-300">Waiting for connection...</p>
+                    )}
                   </div>
                 )}
               </div>
 
               {/* Your Video (Picture-in-Picture) */}
               <div className="absolute bottom-4 right-4 w-48 h-36 bg-slate-600 rounded-xl overflow-hidden shadow-xl border-2 border-white/20">
-                <video
-                  ref={myVideoRef}
-                  autoPlay
-                  muted
-                  className="w-full h-full object-cover"
-                  style={{ display: !isVideoOff ? "block" : "none" }}
-                />
-                {isVideoOff && (
+                {!isVideoOff ? (
+                  <video
+                    ref={myVideoRef}
+                    autoPlay
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover"
+                    onError={(e) => console.error("My video error:", e)}
+                  />
+                ) : (
                   <div className="w-full h-full bg-slate-600 flex items-center justify-center">
                     <Avatar className="w-16 h-16">
                       <AvatarFallback className="bg-gradient-to-br from-slate-500 to-slate-600 text-white text-xl font-bold">
@@ -653,18 +659,17 @@ export default function Chat() {
                 )}
               </div>
 
-              {/* Call Status */}
-              {isCallConnected && (
-                <div className="absolute top-4 left-4">
-                  <Badge className="bg-green-500/20 text-green-400 border-green-500/30 px-3 py-1">
-                    <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-                    Connected
-                  </Badge>
+              {/* Debug Info - Only show in development */}
+              {process.env.NODE_ENV === "development" && (
+                <div className="absolute top-4 left-4 bg-black/50 text-white p-2 rounded-md text-xs">
+                  <div>Status: {isCallConnected ? "Connected" : "Connecting"}</div>
+                  <div>Streams: {myVideoRef.current?.srcObject ? "Local OK" : "No local"}</div>
+                  <div>Remote: {friendVideoRef.current?.srcObject ? "Remote OK" : "No remote"}</div>
                 </div>
               )}
             </div>
 
-            {/* Call Controls - Fixed at bottom center */}
+            {/* Call Controls */}
             <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-slate-900/90 to-transparent">
               <div className="flex justify-center space-x-4">
                 <Button
