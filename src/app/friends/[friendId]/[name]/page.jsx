@@ -1,140 +1,3 @@
-// "use client";
-
-// import { useState, useEffect, useRef } from "react";
-// import { useSocket } from "../../../../lib/socket";
-// import { useRouter, useParams } from "next/navigation";
-// import moment from "moment";
-
-// export default function Chat() {
-//   const router = useRouter();
-//   const params = useParams();
-//   const userId =
-//     typeof window !== "undefined" ? localStorage.getItem("userId") : null;
-//   const username =
-//     typeof window !== "undefined" ? localStorage.getItem("username") : null;
-//   const friendId = params.friendId;
-//   const name = params.name;
-
-//   const [messages, setMessages] = useState([]);
-//   const [newMessage, setNewMessage] = useState("");
-//   const { socket, isConnected } = useSocket();
-
-//   const messagesEndRef = useRef(null);
-
-//   const scrollToBottom = () => {
-//     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-//   };
-
-//   useEffect(() => {
-//     scrollToBottom();
-//   }, [messages]);
-
-//   useEffect(() => {
-//     if (!userId || !friendId || !socket) return;
-
-//     const roomId = [userId, friendId].sort().join("-");
-//     console.log(`Joining room: ${roomId}`);
-
-//     socket.emit("join-room", { userId, friendId });
-
-//     socket.on("receive-message", (message) => {
-//       console.log("Message received:", message);
-//       setMessages((prevMessages) => [...prevMessages, message]);
-//     });
-
-//     return () => {
-//       socket.off("receive-message");
-//     };
-//   }, [userId, friendId, socket]);
-
-//   const handleSendMessage = (e) => {
-//     e.preventDefault();
-//     if (!newMessage.trim()) return;
-
-//     const messageData = {
-//       senderId: userId,
-//       receiverId: friendId,
-//       message: newMessage,
-//       createdAt: new Date(),
-//     };
-
-//     console.log("Sending message:", messageData);
-//     socket.emit("send-message", messageData);
-
-//     setMessages((prevMessages) => [...prevMessages, messageData]);
-//     setNewMessage("");
-//   };
-
-//   return (
-//     <div className="flex flex-col h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
-//       {/* Header */}
-//       <div className="bg-gray-900 text-white py-4 px-6 flex justify-between items-center shadow-md">
-//         <div className="flex items-center space-x-3">
-//           <div className="w-12 h-12 text-3xl italic bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full flex items-center justify-center font-bold shadow-md">
-//             {name[0].toUpperCase()}
-//           </div>
-//           <h1 className="text-3xl uppercase font-bold">{name}</h1>
-//         </div>
-//         <button
-//           onClick={() => router.push("/friends")}
-//           className="text-xl bg-gray-700 font-semibold text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition-all duration-300"
-//         >
-//           ⬅
-//         </button>
-//       </div>
-
-//       {/* Chat Messages */}
-//       <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-800">
-//         {messages.map((msg, index) => (
-//           <div
-//             key={index}
-//             className={`flex ${
-//               msg.senderId === userId ? "justify-end" : "justify-start"
-//             }`}
-//           >
-//             <div
-//               className={`p-4 rounded-2xl max-w-xs shadow-lg text-sm transition-all duration-300 ${
-//                 msg.senderId === userId
-//                   ? "bg-wheat text-white font-extrabold text-lg rounded-br-none"
-//                   : "bg-gray-500 text-white font-extrabold text-lg rounded-bl-none"
-//               }`}
-//             >
-//               <p className="text-xs uppercase font-bold text-black mb-1">
-//                 {msg.senderId !== userId ? name : username}
-//               </p>
-//               <p>{msg.message}</p>
-//               <span className="text-xs text-black mt-2 block">
-//                 {moment(msg.createdAt).format("h:mm A")}
-//               </span>
-//             </div>
-//           </div>
-//         ))}
-//         <div ref={messagesEndRef} />
-//       </div>
-
-//       {/* Chat Input */}
-//       <form
-//         onSubmit={handleSendMessage}
-//         className="p-4 bg-gray-900 border-t border-gray-800 flex items-center space-x-4"
-//       >
-//         <input
-//           type="text"
-//           value={newMessage}
-//           onChange={(e) => setNewMessage(e.target.value)}
-//           placeholder="Type a message..."
-//           className="flex-grow px-4 py-3 border-none rounded-full shadow-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-//         />
-//         <button
-//           type="submit"
-//           className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-5 py-3 rounded-full font-medium hover:scale-105 shadow-md transition-all duration-300"
-//         >
-//         ➤
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -600,55 +463,48 @@ export default function Chat() {
       )}
 
       {/* Video Call Section */}
-      {/* Video Call Section */}
-      {/* Video Call Section */}
       {showVideo && (
         <div className="fixed inset-0 bg-gradient-to-br from-slate-900 to-slate-800 z-40 animate-fade-in">
           <div className="h-full flex flex-col">
             {/* Video Container */}
             <div className="flex-1 relative p-4">
               {/* Friend's Video (Main) */}
-              <div className="w-full h-full bg-slate-700 rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
-                {isCallConnected ? (
-                  <video
-                    ref={friendVideoRef}
-                    autoPlay
-                    playsInline
-                    className="w-full h-full object-cover"
-                    onError={(e) => console.error("Friend video error:", e)}
-                  />
-                ) : (
-                  <div className="text-center">
-                    <Avatar className="w-32 h-32 mx-auto mb-6 ring-4 ring-white/20">
-                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-4xl font-bold">
-                        {name?.charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <h3 className="text-2xl font-semibold text-white mb-2">{name}</h3>
-                    {isCalling ? (
-                      <div className="flex flex-col items-center">
-                        <p className="text-slate-300 mb-2">Connecting...</p>
-                        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                      </div>
-                    ) : (
-                      <p className="text-slate-300">Waiting for connection...</p>
-                    )}
+              <div className="w-full h-full bg-slate-700 rounded-2xl overflow-hidden shadow-2xl">
+                <video
+                  ref={friendVideoRef}
+                  autoPlay
+                  className="w-full h-full object-cover"
+                  style={{ display: isCallConnected ? "block" : "none" }}
+                />
+                {!isCallConnected && (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="text-center">
+                      <Avatar className="w-32 h-32 mx-auto mb-6 ring-4 ring-white/20">
+                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-4xl font-bold">
+                          {name?.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <h3 className="text-2xl font-semibold text-white mb-2">{name}</h3>
+                      {isCalling ? (
+                        <p className="text-slate-300">Connecting...</p>
+                      ) : (
+                        <p className="text-slate-300">Connected</p>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
 
               {/* Your Video (Picture-in-Picture) */}
-              <div className="absolute bottom-4 right-4 w-48 h-36 bg-slate-600 rounded-xl overflow-hidden shadow-xl border-2 border-white/20">
-                {!isVideoOff ? (
-                  <video
-                    ref={myVideoRef}
-                    autoPlay
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover"
-                    onError={(e) => console.error("My video error:", e)}
-                  />
-                ) : (
+              <div className="absolute top-8 right-8 w-48 h-36 bg-slate-600 rounded-xl overflow-hidden shadow-xl border-2 border-white/20">
+                <video
+                  ref={myVideoRef}
+                  autoPlay
+                  muted
+                  className="w-full h-full object-cover"
+                  style={{ display: !isVideoOff ? "block" : "none" }}
+                />
+                {isVideoOff && (
                   <div className="w-full h-full bg-slate-600 flex items-center justify-center">
                     <Avatar className="w-16 h-16">
                       <AvatarFallback className="bg-gradient-to-br from-slate-500 to-slate-600 text-white text-xl font-bold">
@@ -659,26 +515,28 @@ export default function Chat() {
                 )}
               </div>
 
-              {/* Debug Info - Only show in development */}
-              {process.env.NODE_ENV === "development" && (
-                <div className="absolute top-4 left-4 bg-black/50 text-white p-2 rounded-md text-xs">
-                  <div>Status: {isCallConnected ? "Connected" : "Connecting"}</div>
-                  <div>Streams: {myVideoRef.current?.srcObject ? "Local OK" : "No local"}</div>
-                  <div>Remote: {friendVideoRef.current?.srcObject ? "Remote OK" : "No remote"}</div>
+              {/* Call Status */}
+              {isCallConnected && (
+                <div className="absolute top-8 left-8">
+                  <Badge className="bg-green-500/20 text-green-400 border-green-500/30 px-3 py-1">
+                    <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                    Connected
+                  </Badge>
                 </div>
               )}
             </div>
 
             {/* Call Controls */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-slate-900/90 to-transparent">
+            <div className="p-6 bg-slate-900/50 backdrop-blur-md">
               <div className="flex justify-center space-x-4">
                 <Button
                   onClick={toggleMute}
                   className={`p-4 rounded-full transition-all duration-300 hover:scale-110 ${
                     isMuted
-                      ? "bg-red-500/90 text-white"
-                      : "bg-white/20 text-white hover:bg-white/30"
+                      ? "bg-red-500/20 text-red-400 border-red-500/30"
+                      : "bg-slate-700/50 text-white border-slate-600/30"
                   }`}
+                  variant="outline"
                 >
                   {isMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
                 </Button>
@@ -687,16 +545,17 @@ export default function Chat() {
                   onClick={toggleVideo}
                   className={`p-4 rounded-full transition-all duration-300 hover:scale-110 ${
                     isVideoOff
-                      ? "bg-red-500/90 text-white"
-                      : "bg-white/20 text-white hover:bg-white/30"
+                      ? "bg-red-500/20 text-red-400 border-red-500/30"
+                      : "bg-slate-700/50 text-white border-slate-600/30"
                   }`}
+                  variant="outline"
                 >
                   {isVideoOff ? <VideoOff className="w-6 h-6" /> : <Video className="w-6 h-6" />}
                 </Button>
 
                 <Button
                   onClick={endCall}
-                  className="bg-red-500/90 hover:bg-red-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                  className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
                 >
                   <PhoneOff className="w-6 h-6" />
                 </Button>
